@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Management System</title>
+    <style>
+        body {
+            background-color: #87CEEB;
+            font-family: 'Cambria', Georgia, serif !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 440px;
+            margin: 20px 0;
+            font-family: 'Cambria', Georgia, serif !important;
+        }
+
+        .form-container.form-active {
+            background-color: #008080 !important;
+        }
+
+        .form-container.form-active h2,
+        .form-container.form-active label {
+            color: #ffffff !important;
+            font-family: 'Cambria', Georgia, serif !important;
+        }
+
+        .form-container.form-active input[type="text"],
+        .form-container.form-active input[type="date"],
+        .form-container.form-active input[type="time"],
+        .form-container.form-active select {
+            background-color: #40E0D0 !important;
+            color: #000000;
+            border-color: #4f5b5b;
+            font-size: 16px !important;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-family: 'Cambria', Georgia, serif !important;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 22px;
+            font-size: 26px;
+            font-family: 'Cambria', Georgia, serif !important;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 14px;
+            font-family: 'Cambria', Georgia, serif !important;
+        }
+
+        label {
+            font-weight: bold;
+            color: #444;
+            display: inline-block;
+            margin-bottom: 6px;
+            font-size: 17px;
+            font-family: 'Cambria', Georgia, serif !important;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            font-size: 16px;
+            text-transform: uppercase;
+            font-family: 'Cambria', Georgia, serif !important;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 18px;
+            font-family: 'Cambria', Georgia, serif !important;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: bold;
+            width: 100%;
+            font-family: 'Cambria', Georgia, serif !important;
+        }
+
+        button:disabled {
+            background-color: #cccccc !important;
+            cursor: not-allowed;
+        }
+
+        .unlock-btn {
+            background-color: #ffc107;
+            color: #333;
+            margin-bottom: 12px;
+            font-family: 'Cambria', Georgia, serif !important;
+        }
+
+        .reset-btn {
+            background-color: #6c757d;
+            color: white;
+            margin-top: 10px;
+            font-family: 'Cambria', Georgia, serif !important;
+        }
+
+        .action-buttons-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .btn-checkin {
+            background-color: #28a745 !important;
+        }
+
+        .btn-checkout {
+            background-color: #dc3545 !important;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="form-container" id="mainFormContainer">
+        <h2>Room Management 🏠</h2>
+
+        <table>
+            <tr>
+                <td>
+                    <label for="room_no">Room No.:</label>
+                    <select id="room_no" name="room_no" onchange="handleRoomSelection()">
+                        <option value="">SELECT ROOM NUMBER</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+
+        <div id="actionButtons" class="action-buttons-group hidden">
+            <button type="button" class="btn-checkin" onclick="openCheckInForm()">CHECK IN</button>
+            <button type="button" class="btn-checkout" onclick="openCheckOutForm()">CHECK OUT</button>
+        </div>
+
+        <!-- CHECK IN SECTION -->
+        <div id="checkin-section" class="hidden">
+            <!-- Form 1: LP & ALP -->
+            <div id="form-no-1" class="hidden">
+                <table>
+                    <tr>
+                        <td><label>Date:</label><input type="date" id="c1_date" onclick="this.showPicker()"></td>
+                    </tr>
+                    <tr>
+                        <td><label>I/C Train No.:</label><input type="text" id="c1_train_no"></td>
+                    </tr>
+                    <tr>
+                        <td><label>LP Name:</label><input type="text" id="c1_lp_name"></td>
+                    </tr>
+                    <tr>
+                        <td><label>LP HQ:</label><input type="text" id="c1_lp_hq"></td>
+                    </tr>
+                    <tr>
+                        <td><label>ALP Name:</label><input type="text" id="c1_alp_name"></td>
+                    </tr>
+                    <tr>
+                        <td><label>ALP HQ:</label><input type="text" id="c1_alp_hq"></td>
+                    </tr>
+                    <tr>
+                        <td><label>Sign Off Time:</label><input type="time" id="c1_sign_off_time"></td>
+                    </tr>
+                </table>
+                <div class="btn-container">
+                    <button type="button" id="unlockBtn_1" class="unlock-btn hidden" onclick="unlockForm('1')">Unlock to Edit / Update</button>
+                    <button type="button" id="saveBtn_1" onclick="submitCheckIn('1')">Save Check-In Data</button>
+                    <button type="button" class="reset-btn" onclick="resetSelection()">Cancel / Reset</button>
+                </div>
+            </div>
+
+            <!-- Form 2: Train Manager (Guard) -->
+            <div id="form-no-2" class="hidden">
+                <table>
+                    <tr>
+                        <td><label>Date:</label><input type="date" id="c2_date" onclick="this.showPicker()"></td>
+                    </tr>
+                    <tr>
+                        <td><label>I/C Train No.:</label><input type="text" id="c2_train_no"></td>
+                    </tr>
+                    <tr>
+                        <td><label>TM Name:</label><input type="text" id="c2_tm_name"></td>
+                    </tr>
+                    <tr>
+                        <td><label>TM HQ:</label><input type="text" id="c2_tm_hq"></td>
+                    </tr>
+                    <tr>
+                        <td><label>Sign Off Time:</label><input type="time" id="c2_sign_off_time"></td>
+                    </tr>
+                </table>
+                <div class="btn-container">
+                    <button type="button" id="unlockBtn_2" class="unlock-btn hidden" onclick="unlockForm('2')">Unlock to Edit / Update</button>
+                    <button type="button" id="saveBtn_2" onclick="submitCheckIn('2')">Save Check-In Data</button>
+                    <button type="button" class="reset-btn" onclick="resetSelection()">Cancel / Reset</button>
+                </div>
+            </div>
+
+            <!-- Form 3: LP, ALP & TM Combined -->
+            <div id="form-no-3" class="hidden">
+                <table>
+                    <tr>
+                        <td><label>Date:</label><input type="date" id="c3_date" onclick="this.showPicker()"></td>
+                    </tr>
+                    <tr>
+                        <td><label>I/C Train No.:</label><input type="text" id="c3_train_no"></td>
+                    </tr>
+                    <tr>
+                        <td><label>LP Name:</label><input type="text" id="c3_lp_name"></td>
+                    </tr>
+                    <tr>
+                        <td><label>LP HQ:</label><input type="text" id="c3_lp_hq"></td>
+                    </tr>
+                    <tr>
+                        <td><label>ALP Name:</label><input type="text" id="c3_alp_name"></td>
+                    </tr>
+                    <tr>
+                        <td><label>ALP HQ:</label><input type="text" id="c3_alp_hq"></td>
+                    </tr>
+                    <tr>
+                        <td><label>TM Name:</label><input type="text" id="c3_tm_name"></td>
+                    </tr>
+                    <tr>
+                        <td><label>TM HQ:</label><input type="text" id="c3_tm_hq"></td>
+                    </tr>
+                    <tr>
+                        <td><label>Sign Off Time:</label><input type="time" id="c3_sign_off_time"></td>
+                    </tr>
+                </table>
+                <div class="btn-container">
+                    <button type="button" id="unlockBtn_3" class="unlock-btn hidden" onclick="unlockForm('3')">Unlock to Edit / Update</button>
+                    <button type="button" id="saveBtn_3" onclick="submitCheckIn('3')">Save Check-In Data</button>
+                    <button type="button" class="reset-btn" onclick="resetSelection()">Cancel / Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHECK OUT SECTION -->
+        <div id="checkout-section" class="hidden">
+            <table>
+                <tr>
+                    <td><label>Date:</label><input type="date" id="cout_date" onclick="this.showPicker()"></td>
+                </tr>
+                <tr>
+                    <td><label>T.O. Time:</label><input type="time" id="cout_to_time"></td>
+                </tr>
+                <tr>
+                    <td><label>Sign On Time:</label><input type="time" id="cout_sign_on"></td>
+                </tr>
+            </table>
+            <div class="btn-container">
+                <button type="button" id="saveBtn_checkout" onclick="submitCheckOut()">Save Check-Out Data</button>
+                <button type="button" class="reset-btn" onclick="resetSelection()">Cancel / Reset</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbw74zMFXScfJMJ-3kNlNaN1KccDUGsYmA3qIM1RvZrOGF9YPDirKs5dOf_4a-tEdsfZ/exec';
+        let activeFormId = "1";
+        let enterPressTimer = null;
+        let enterCount = 0;
+        let isOverrideMode = false; // ओवरराइड ट्रैक करने के लिए वेरिएबल
+
+        window.onload = function () {
+            const selectDropdown = document.getElementById("room_no");
+            let rooms = ["1", "2", "3", "4", "5", "6", "7", "8", "9 A", "9 B", "9 C", "9 D", "10 A", "10 B", "10 C", "10 D", "11 A", "11 B", "11 C", "11 D", "12", "13", "14", "15", "16", "17", "18", "19 A", "19 B", "M 1", "M 2", "M 3"];
+            rooms.forEach(room => {
+                let option = document.createElement("option");
+                option.value = room;
+                option.text = room;
+                selectDropdown.appendChild(option);
+            });
+
+            setupEnterKeyNavigation();
+        };
+
+        function setupEnterKeyNavigation() {
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter') {
+                    let activeElement = document.activeElement;
+                    if (activeElement.tagName === 'BUTTON' || activeElement.tagName === 'SELECT') {
+                        return;
+                    }
+                    event.preventDefault();
+
+                    let activeSection = null;
+                    if (!document.getElementById("checkin-section").classList.contains("hidden")) {
+                        activeSection = document.getElementById(`form-no-${activeFormId}`);
+                    } else if (!document.getElementById("checkout-section").classList.contains("hidden")) {
+                        activeSection = document.getElementById("checkout-section");
+                    }
+
+                    if (activeSection && !activeSection.classList.contains("hidden")) {
+                        let inputs = Array.from(activeSection.querySelectorAll("input:not([disabled])"));
+                        let currentIndex = inputs.indexOf(activeElement);
+
+                        if (currentIndex !== -1 && currentIndex < inputs.length - 1) {
+                            enterCount = 0;
+                            inputs[currentIndex + 1].focus();
+                        } else {
+                            enterCount++;
+                            if (enterCount === 1) {
+                                clearTimeout(enterPressTimer);
+                                enterPressTimer = setTimeout(() => { enterCount = 0; }, 1000);
+                            } else if (enterCount >= 2) {
+                                enterCount = 0;
+                                clearTimeout(enterPressTimer);
+
+                                if (!document.getElementById("checkin-section").classList.contains("hidden")) {
+                                    let submitBtn = document.getElementById(`saveBtn_${activeFormId}`);
+                                    if (submitBtn && !submitBtn.disabled) {
+                                        submitCheckIn(activeFormId);
+                                    }
+                                } else if (!document.getElementById("checkout-section").classList.contains("hidden")) {
+                                    let checkoutBtn = document.getElementById("saveBtn_checkout");
+                                    if (checkoutBtn && !checkoutBtn.disabled) {
+                                        submitCheckOut();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function handleRoomSelection() {
+            var roomSelect = document.getElementById("room_no").value.trim();
+            var actionButtons = document.getElementById("actionButtons");
+
+            actionButtons.classList.add("hidden");
+            document.getElementById("checkin-section").classList.add("hidden");
+            document.getElementById("checkout-section").classList.add("hidden");
+            document.getElementById("mainFormContainer").classList.remove("form-active");
+
+            if (roomSelect === "") return;
+
+            determineActiveForm(roomSelect);
+            actionButtons.classList.remove("hidden");
+        }
+
+        function determineActiveForm(roomSelect) {
+            let roomClean = roomSelect.toUpperCase().replace(/\s+/g, '');
+            let roomNum = parseInt(roomClean);
+
+            if ((!isNaN(roomNum) && ((roomNum >= 1 && roomNum <= 8) || (roomNum >= 13 && roomNum <= 19))) ||
+                roomClean === "19A" || roomClean === "19B" || roomClean === "M2" || roomClean === "M3") {
+                activeFormId = "1";
+            }
+            else if (!isNaN(roomNum) && roomNum >= 9 && roomNum <= 11) {
+                activeFormId = "2";
+            }
+            else if (roomNum === 12 || roomClean === "M1") {
+                activeFormId = "3";
+            }
+        }
+
+        function openCheckInForm() {
+            var roomSelect = document.getElementById("room_no").value.trim();
+            document.getElementById("actionButtons").classList.add("hidden");
+            document.getElementById("checkout-section").classList.add("hidden");
+
+            var checkinSec = document.getElementById("checkin-section");
+            checkinSec.classList.remove("hidden");
+            document.getElementById("mainFormContainer").classList.add("form-active");
+
+            ['1', '2', '3'].forEach(id => {
+                let fDiv = document.getElementById(`form-no-${id}`);
+                if (id === activeFormId) { fDiv.classList.remove("hidden"); }
+                else { fDiv.classList.add("hidden"); }
+            });
+
+            fetchAndFillData(roomSelect);
+        }
+
+        function openCheckOutForm() {
+            var roomSelect = document.getElementById("room_no").value.trim();
+            document.getElementById("actionButtons").classList.add("hidden");
+            document.getElementById("checkin-section").classList.add("hidden");
+            document.getElementById("mainFormContainer").classList.add("form-active");
+
+            ['1', '2', '3'].forEach(id => { document.getElementById(`form-no-${id}`).classList.add("hidden"); });
+
+            document.getElementById("checkout-section").classList.remove("hidden");
+            document.getElementById("cout_date").value = "";
+            document.getElementById("cout_to_time").value = "";
+            document.getElementById("cout_sign_on").value = "";
+
+            var checkoutBtn = document.getElementById("saveBtn_checkout");
+            checkoutBtn.disabled = false;
+            checkoutBtn.innerText = "Save Check-Out Data";
+        }
+
+        function fetchAndFillData(roomSelect) {
+            isOverrideMode = false; // हर नई सर्च पर ओवरराइड मोड रीसेट करें
+            let activeFormDiv = document.getElementById(`form-no-${activeFormId}`);
+            activeFormDiv.querySelectorAll("input").forEach(input => { input.value = ""; });
+
+            fetch(`${scriptURL}?room_no=${encodeURIComponent(roomSelect)}`)
+                .then(response => response.json())
+                .then(data => {
+                    var submitBtn = document.getElementById(`saveBtn_${activeFormId}`);
+                    var unlockBtn = document.getElementById(`unlockBtn_${activeFormId}`);
+
+                    if (data.exists === true || data.exists === "true") {
+                        if (document.getElementById(`c${activeFormId}_date`)) document.getElementById(`c${activeFormId}_date`).value = data.date || '';
+                        if (document.getElementById(`c${activeFormId}_train_no`)) document.getElementById(`c${activeFormId}_train_no`).value = (data.train_no || '').toUpperCase();
+                        if (document.getElementById(`c${activeFormId}_lp_name`)) document.getElementById(`c${activeFormId}_lp_name`).value = (data.lp_name || '').toUpperCase();
+                        if (document.getElementById(`c${activeFormId}_lp_hq`)) document.getElementById(`c${activeFormId}_lp_hq`).value = (data.lp_hq || '').toUpperCase();
+                        if (document.getElementById(`c${activeFormId}_alp_name`)) document.getElementById(`c${activeFormId}_alp_name`).value = (data.alp_name || '').toUpperCase();
+                        if (document.getElementById(`c${activeFormId}_alp_hq`)) document.getElementById(`c${activeFormId}_alp_hq`).value = (data.alp_hq || '').toUpperCase();
+                        if (document.getElementById(`c${activeFormId}_tm_name`)) document.getElementById(`c${activeFormId}_tm_name`).value = (data.tm_name || '').toUpperCase();
+                        if (document.getElementById(`c${activeFormId}_tm_hq`)) document.getElementById(`c${activeFormId}_tm_hq`).value = (data.tm_hq || '').toUpperCase();
+                        if (document.getElementById(`c${activeFormId}_sign_off_time`)) document.getElementById(`c${activeFormId}_sign_off_time`).value = data.sign_off_time || '';
+
+                        toggleFormFields(activeFormDiv, true);
+                        if (submitBtn) {
+                            submitBtn.disabled = true;
+                            submitBtn.innerText = "Data Already Saved (Locked)";
+                        }
+                        if (unlockBtn) { 
+                            unlockBtn.classList.remove("hidden"); 
+                        }
+                    } else {
+                        toggleFormFields(activeFormDiv, false);
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerText = "Save Check-In Data";
+                        }
+                        if (unlockBtn) { 
+                            unlockBtn.classList.add("hidden"); 
+                        }
+                    }
+                })
+                .catch(error => { console.error('Error fetching data:', error); });
+        }
+
+        function unlockForm(formId) {
+            var roomSelect = document.getElementById("room_no").value;
+            var confirmUnlock = confirm(`⚠️ चेतावनी:\nआप Room No. ${roomSelect} का डेटा अनलॉक और एडिट करने जा रहे हैं।\n\nक्या आप वाकई डेटा बदलना चाहते हैं?`);
+            
+            if (!confirmUnlock) {
+                return;
+            }
+
+            isOverrideMode = true; // अनलॉक दबाने पर ओवरराइड फ्लैग सही किया गया
+
+            var activeFormDiv = document.getElementById(`form-no-${formId}`);
+            toggleFormFields(activeFormDiv, false);
+
+            var submitBtn = document.getElementById(`saveBtn_${formId}`);
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Update / Override Check-In Data";
+            }
+            document.getElementById(`unlockBtn_${formId}`).classList.add("hidden");
+        }
+
+        function toggleFormFields(formDiv, disable) {
+            formDiv.querySelectorAll("input").forEach(input => { input.disabled = disable; });
+        }
+
+        function resetSelection() {
+            document.getElementById("room_no").value = "";
+            handleRoomSelection();
+        }
+
+        function submitCheckIn(formId) {
+            var submitBtn = document.getElementById(`saveBtn_${formId}`);
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Saving Data...";
+
+            var payload = {
+                form_type: "checkin",
+                room_no: document.getElementById("room_no").value,
+                date: document.getElementById(`c${formId}_date`) ? document.getElementById(`c${formId}_date`).value : "",
+                train_no: document.getElementById(`c${formId}_train_no`) ? document.getElementById(`c${formId}_train_no`).value.toUpperCase() : "",
+                lp_name: document.getElementById(`c${formId}_lp_name`) ? document.getElementById(`c${formId}_lp_name`).value.toUpperCase() : "",
+                lp_hq: document.getElementById(`c${formId}_lp_hq`) ? document.getElementById(`c${formId}_lp_hq`).value.toUpperCase() : "",
+                alp_name: document.getElementById(`c${formId}_alp_name`) ? document.getElementById(`c${formId}_alp_name`).value.toUpperCase() : "",
+                alp_hq: document.getElementById(`c${formId}_alp_hq`) ? document.getElementById(`c${formId}_alp_hq`).value.toUpperCase() : "",
+                tm_name: document.getElementById(`c${formId}_tm_name`) ? document.getElementById(`c${formId}_tm_name`).value.toUpperCase() : "",
+                tm_hq: document.getElementById(`c${formId}_tm_hq`) ? document.getElementById(`c${formId}_tm_hq`).value.toUpperCase() : "",
+                sign_off_time: document.getElementById(`c${formId}_sign_off_time`) ? document.getElementById(`c${formId}_sign_off_time`).value : "",
+                is_override: isOverrideMode // ओवरराइड स्टेटस बैकएंड भेजा गया
+            };
+
+            sendDataToSheet(payload, submitBtn);
+        }
+
+        function sendDataToSheet(payload, btnElement) {
+            fetch(scriptURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === "error") {
+                        alert("❌ " + result.message);
+                        btnElement.disabled = false;
+                        btnElement.innerText = isOverrideMode ? "Update / Override Check-In Data" : "Save Check-In Data";
+                    } else {
+                        alert('✅ ' + result.message);
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Network or Server Error occurred.');
+                    btnElement.disabled = false;
+                    btnElement.innerText = "Save Check-In Data";
+                });
+        }
+
+        async function submitCheckOut() {
+            var coutDate = document.getElementById("cout_date").value;
+            var coutTime = document.getElementById("cout_to_time").value;
+            var coutSignOn = document.getElementById("cout_sign_on").value;
+            var roomNo = document.getElementById("room_no").value;
+
+            if (!coutDate || !coutTime || !coutSignOn) {
+                alert("Please enter all checkout details!");
+                return;
+            }
+
+            var checkoutBtn = document.getElementById("saveBtn_checkout");
+            checkoutBtn.disabled = true;
+            checkoutBtn.innerText = "Saving Check-Out...";
+
+            var payload = {
+                form_type: "checkout",
+                room_no: roomNo,
+                cout_date: coutDate,
+                cout_to_time: coutTime,
+                cout_sign_on: coutSignOn
+            };
+
+            try {
+                let postResponse = await fetch(scriptURL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                let result = await postResponse.json();
+
+                if (result.status === "error") {
+                    alert("❌ " + result.message);
+                    checkoutBtn.disabled = false;
+                    checkoutBtn.innerText = "Save Check-Out Data";
+                } else {
+                    alert('✅ Check-Out Data saved successfully and room cleared!');
+                    location.reload();
+                }
+            } catch (error) {
+                alert('Network Error occurred.');
+                checkoutBtn.disabled = false;
+                checkoutBtn.innerText = "Save Check-Out Data";
+            }
+        }
+    </script>
+
+</body>
+
+</html>

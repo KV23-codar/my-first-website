@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 2 - Indian Logo Page</title>
+    
+    <!-- गूगल फ़ॉन्ट -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #111;
+            overflow: hidden;
+        }
+
+        /* -----------------------------------
+           लेआउट ग्रिड ढांचा (100% फुल स्क्रीन)
+        ----------------------------------- */
+        .layout-container {
+            display: grid;
+            width: 100vw;
+            height: 100vh;
+            grid-template-rows: 200px calc(100vh - 200px);
+            grid-template-columns: 60% 40%;
+            grid-template-areas: 
+                "part1 part1"
+                "part2 part3";
+            background: rgb(128, 194, 255);
+        }
+
+        /* PART 1: टॉप हेडर */
+        .part-1 {
+            grid-area: part1;
+            background: rgb(103, 159, 255);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            height: 200px;
+        }
+
+        /* PART 2: नीचे लेफ्ट साइड */
+        .part-2 {
+            grid-area: part2;
+            background: rgb(128, 194, 255);
+            padding: 15px;
+            height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+
+        /* PART 3: नीचे राइट साइड */
+        .part-3 {
+            grid-area: part3;
+            background: rgb(152, 229, 255);
+            border-left: none;
+            padding: 15px;
+            height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+
+        /* -----------------------------------
+           PART-3: SWITCHES & BUTTONS
+        ----------------------------------- */
+        .switch-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .switch-btn {
+            flex: 1;
+            padding: 10px 5px;
+            background-color: #1f51ff;
+            color: #ffffff;
+            border: 2px solid #001f3f;
+            border-radius: 10px;
+            font-family: 'Cambria', Georgia, serif;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+
+        .switch-btn:hover {
+            background-color: #003cd8;
+            transform: translateY(-2px);
+        }
+
+        .switch-btn.active {
+            background-color: #ff9800;
+            border-color: #b36b00;
+        }
+
+        /* PART-1 एलिमेंट्स */
+        .left-logo {
+            position: absolute;
+            top: 40px;
+            left: 220px;
+        }
+
+        .left-logo img {
+            width: 110px;
+            height: auto;
+            display: block;
+        }
+
+        .right-logo {
+            position: absolute;
+            top: 40px;
+            right: 220px;
+        }
+
+        .right-logo img {
+            width: 200px;
+            height: auto;
+            display: block;
+        }
+
+        .center-text-container {
+            text-align: center;
+            color: #ffff00;
+            font-weight: bold;
+        }
+
+        .hindi-text {
+            font-family: 'Aparajita', 'Tiro Devanagari Hindi', 'Mangal', sans-serif;
+            font-size: 32px;
+            margin-bottom: 2px;
+            white-space: nowrap;
+        }
+
+        .english-text {
+            font-family: 'Cambria', Georgia, serif;
+            font-size: 26px;
+            margin-bottom: 15px;
+            white-space: nowrap;
+        }
+
+        .sub-header-text {
+            font-family: 'Cambria', Georgia, serif;
+            font-size: 24px;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            color: #5C2C14;
+        }
+
+        /* -----------------------------------
+           PART-2: 22 बॉक्स सेट ग्रिड
+        ----------------------------------- */
+        .boxes-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            row-gap: 20px;
+            column-gap: 30px;
+            width: 100%;
+        }
+
+        .box-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 6px;
+            border: 1px solid rgba(0, 0, 0, 0.4); 
+            background-color: transparent;
+            box-sizing: border-box;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7), 0 4px 8px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .box-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 28px rgba(0, 0, 0, 0.85), 0 6px 12px rgba(0, 0, 0, 0.6);
+        }
+
+        .sky-blue-box {
+            width: 100%;
+            height: 38px;
+            border: 2px solid rgb(34, 3, 204);
+            border-radius: 6px;
+            box-sizing: border-box;
+            background-color: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cambria', Georgia, serif;
+            font-size: 26px;
+            font-weight: bold;
+            color: #00d4ff;
+            white-space: nowrap;
+            margin-bottom: 4px;
+        }
+
+        .sub-boxes {
+            display: flex;
+            width: 100%;
+            height: 30px;
+            gap: 4px;
+        }
+
+        .sky-blue-box-21, .sky-blue-box-3 {
+            width: 50%;
+            height: 30px;
+            border: 2px solid rgb(175, 163, 163);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'Cambria', Georgia, serif;
+            font-size: 15px;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .sub-boxes-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+            width: 100%;
+        }
+
+        .sub-boxes-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            width: 100%;
+        }
+
+        .mini-box {
+            height: 30px;
+            border: 2px solid rgb(175, 163, 163);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-family: 'Cambria', Georgia, serif;
+            font-size: 14px;
+            font-weight: bold;
+            background-color: #28a745;
+            box-sizing: border-box;
+            border-radius: 6px;
+        }
+
+        /* -----------------------------------
+           PART-3: टेबल्स CSS
+        ----------------------------------- */
+        .custom-table {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: separate;
+            border-spacing: 4px;
+            font-family: 'Cambria', Georgia, serif;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .table-second {
+            margin-top: 15px;
+        }
+
+        .custom-table th, 
+        .custom-table td {
+            border: 1px solid #999;
+            border-radius: 8px;
+            padding: 8px 4px;
+            word-wrap: break-word;
+            vertical-align: middle;
+            height: 34px;
+            background-color: #ffffff;
+        }
+
+        .custom-table th,
+        .custom-table td.header-cell {
+            background-color: #1f51ff;
+            color: #ffffff;
+            font-weight: bold;
+            border-color: #001f3f;
+            border-radius: 8px;
+        }
+
+        .custom-table tr:hover td:not(.header-cell) {
+            background-color: #e2f0ff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="layout-container">
+        
+        <!-- PART 1: टॉप हेडर -->
+        <div class="part-1">
+            <div class="logo left-logo">
+                <img src="indian logo.jpeg" alt="Indian Logo">
+            </div>
+
+            <div class="center-text-container">
+                <div class="hindi-text">संयुक्त रनिंग रूम, दक्षिण पूर्व मध्य रेलवे, शहडोल</div>
+                <div class="english-text">COMBIND RUNNING ROOM, SOUTH EAST CENTRAL RAILWAY, SHAHDOL</div>
+                <div class="sub-header-text">OCCUPANCY PANEL</div>
+            </div>
+
+            <div class="logo right-logo">
+                <img src="Vande_Bharat.jpeg" alt="Vande Bharat Logo">
+            </div>
+        </div>
+
+        <!-- PART 2: नीचे लेफ्ट साइड -->
+        <div class="part-2">
+            <div class="boxes-grid">
+                <!-- 22 सेट जावास्क्रिप्ट द्वारा बनेंगे -->
+            </div>
+        </div>
+
+        <!-- PART 3: नीचे राइट साइड (टेबल्स ऊपर, स्विचेस नीचे) -->
+        <div class="part-3">
+
+            <!-- छोटी टेबल (AVAILABLE STAFF) ऊपर -->
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th colspan="4">AVAILABLE STAFF</th>
+                        <th rowspan="2">TOTAL STAFF</th>
+                        <th rowspan="2">VACANT BED</th>
+                    </tr>
+                    <tr>
+                        <th>LPG</th>
+                        <th>ALP</th>
+                        <th>GTM</th>
+                        <th>LPP/M</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- बड़ी टेबल (स्टेशन लिस्ट) बीच में -->
+            <table class="custom-table table-second">
+                <thead>
+                    <tr>
+                        <th>USL</th>
+                        <th>PND</th>
+                        <th>BJRI</th>
+                        <th>SGO</th>
+                        <th>SJQ</th>
+                        <th>BSP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td></td><td></td><td></td><td></td><td></td><td class="header-cell">BSP [C]</td></tr>
+                    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                </tbody>
+            </table>
+
+            <!-- स्विच बटन -->
+            <div class="switch-container">
+                <a href="page1.html" class="switch-btn" [id="0"]>SWITCH 1</a>
+                <a href="page2.html" class="switch-btn active" [id="1"]>SWITCH 2</a>
+                <button class="switch-btn" onclick="switchView(3, this)">SWITCH 3</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- जावास्क्रिप्ट -->
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyAvo8zWPmFInjebOvYW36KPOHqNZ2qTXPYsMejRXInL_Sw8ihyArewNOx5Z3kaxxja/exec';
+
+        const roomNames = {
+            1: "ROOM NO. - 1",
+            2: "ROOM NO. - 2",
+            3: "ROOM NO. - 3",
+            4: "ROOM NO. - 4",
+            5: "ROOM NO. - 5",
+            6: "ROOM NO. - 6",
+            7: "ROOM NO. - 7",
+            8: "ROOM NO. - 8",
+            9: "ROOM NO. - 13",
+            10: "ROOM NO. - 14",
+            11: "ROOM NO. - 15",
+            12: "ROOM NO. - 16",
+            13: "ROOM NO. - 17",
+            14: "ROOM NO. - 18",
+            15: "ROOM NO. - M.2",
+            16: "ROOM NO. - M.3",
+            17: "ROOM NO. - 09",
+            18: "ROOM NO. - 10",
+            19: "ROOM NO. - 11",
+            20: "ROOM NO. - 19",
+            21: "ROOM NO. - 12",
+            22: "ROOM NO. - M.1"
+        };
+
+        function getGapColor(sectorNumber) {
+            if (sectorNumber >= 1 && sectorNumber <= 7) return "#29FFED";
+            else if (sectorNumber === 8) return "#FF85B3";
+            else if (sectorNumber >= 9 && sectorNumber <= 12) return "#17F68A";
+            else if (sectorNumber >= 13 && sectorNumber <= 16) return "#29FFED";
+            else if (sectorNumber >= 17 && sectorNumber <= 20) return "#FEED29";
+            else return "#29FFED";
+        }
+
+        function generate22Sets() {
+            const gridContainer = document.querySelector('.boxes-grid');
+            gridContainer.innerHTML = '';
+
+            for (let i = 1; i <= 22; i++) {
+                let cardHTML = '';
+                const roomTitle = roomNames[i] || '';
+                const gapBgColor = getGapColor(i);
+
+                if (i >= 17 && i <= 20) {
+                    cardHTML = `
+                        <div class="box-card" id="set-${i}" style="background-color: ${gapBgColor};">
+                            <div class="sky-blue-box">${roomTitle}</div>
+                            <div class="sub-boxes-4">
+                                <div class="mini-box box-1"></div>
+                                <div class="mini-box box-2"></div>
+                                <div class="mini-box box-3"></div>
+                                <div class="mini-box box-4"></div>
+                            </div>
+                        </div>
+                    `;
+                } else if (i === 21 || i === 22) {
+                    cardHTML = `
+                        <div class="box-card" id="set-${i}" style="background-color: ${gapBgColor};">
+                            <div class="sky-blue-box">${roomTitle}</div>
+                            <div class="sub-boxes-3">
+                                <div class="mini-box box-1"></div>
+                                <div class="mini-box box-2"></div>
+                                <div class="mini-box box-3"></div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    cardHTML = `
+                        <div class="box-card" id="set-${i}" style="background-color: ${gapBgColor};">
+                            <div class="sky-blue-box">${roomTitle}</div>
+                            <div class="sub-boxes">
+                                <div class="sky-blue-box-21 red-box">लोड हो रहा...</div>
+                                <div class="sky-blue-box-3 green-box">लोड हो रहा...</div>
+                            </div>
+                        </div>
+                    `;
+                }
+                gridContainer.insertAdjacentHTML('beforeend', cardHTML);
+            }
+        }
+
+        function fetchSheetData() {
+            fetch(scriptURL, { redirect: "follow" })
+                .then(response => response.json())
+                .then(data => {
+                    for (let sectorIndex = 1; sectorIndex <= 16; sectorIndex++) {
+                        const rowData = data[sectorIndex] || [];
+                        const bVal = rowData[1] ? String(rowData[1]).trim() : '';
+                        const cVal = rowData[2] ? String(rowData[2]).trim() : '';
+                        const dVal = rowData[3] ? String(rowData[3]).trim() : '';
+                        const eVal = rowData[4] ? String(rowData[4]).trim() : '';
+
+                        const sectorBox = document.querySelector(`#set-${sectorIndex}`);
+                        if (sectorBox) {
+                            const leftBox = sectorBox.querySelector('.red-box');
+                            const rightBox = sectorBox.querySelector('.green-box');
+
+                            if (leftBox) {
+                                leftBox.style.backgroundColor = bVal.length > 0 ? "red" : "#28a745";
+                                leftBox.innerText = bVal.length > 0 ? cVal : "";
+                            }
+                            if (rightBox) {
+                                rightBox.style.backgroundColor = dVal.length > 0 ? "red" : "#28a745";
+                                rightBox.innerText = dVal.length > 0 ? eVal : "";
+                            }
+                        }
+                    }
+                })
+                .catch(error => console.error('Data loading error:', error));
+        }
+
+        window.onload = function() {
+            generate22Sets();
+            fetchSheetData();
+        };
+
+        setInterval(fetchSheetData, 5000);
+    </script>
+</body>
+</html>
