@@ -12,7 +12,13 @@
 
     <style>
         * { box-sizing: border-box; }
-        body { margin: 0; padding: 0; background-color: #111; overflow: hidden; }
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background-color: #111; 
+            overflow: hidden; 
+            zoom: 90%; /* यह आपके पेज को स्वचालित रूप से 80% लुक पर सेट रखेगा */
+        }
         .layout-container {
             display: grid;
             width: 100vw;
@@ -169,19 +175,14 @@
             }
         }
 
-        // अपडेटेड टाइम फॉर्मेटिंग फ़ंक्शन (जो UTC से लोकल टाइम का अंतर ठीक करता है)
         function formatTimeToHHMM(val) {
             if (!val || val === '-') return '-';
-            
-            // यदि वैल्यू ISO डेट/टाइम स्ट्रिंग या टाइमस्टैम्प है
             let dateObj = new Date(val);
             if (!isNaN(dateObj.getTime())) {
                 let hours = String(dateObj.getHours()).padStart(2, '0');
                 let minutes = String(dateObj.getMinutes()).padStart(2, '0');
                 return hours + ':' + minutes;
             }
-            
-            // यदि यह सामान्य स्ट्रिंग है
             if (typeof val === 'string' && val.includes('T')) {
                 let timePart = val.split('T')[1];
                 if (timePart) {
@@ -277,7 +278,6 @@
                 }
             }
 
-            // 1. Part 3 की पहली टेबल (AVAILABLE STAFF)
             const staffTbody = document.getElementById('staff-tbody');
             if (staffTbody) {
                 staffTbody.innerHTML = '';
@@ -294,7 +294,6 @@
                 staffTbody.insertAdjacentHTML('beforeend', rowHtml);
             }
 
-            // 2. Part 3 की दूसरी टेबल (रेंज Q2:W10)
             const tbody = document.getElementById('q2u10-tbody');
             if (tbody) {
                 tbody.innerHTML = '';
