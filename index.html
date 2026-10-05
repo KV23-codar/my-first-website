@@ -12,12 +12,13 @@
 
     <style>
         * { box-sizing: border-box; }
-        body { margin: 0; padding: 0; background-color: #111; overflow: hidden; }
+        body { margin: 0; padding: 0; background-color: #111; }
+        
         .layout-container {
             display: grid;
             width: 100vw;
-            height: 100vh;
-            grid-template-rows: 200px calc(100vh - 200px);
+            min-height: 100vh;
+            grid-template-rows: 200px auto;
             grid-template-columns: 60% 40%;
             grid-template-areas: "part1 part1" "part2 part3";
             background: rgb(128, 194, 255);
@@ -25,10 +26,12 @@
         .part-1 {
             grid-area: part1; background: rgb(103, 159, 255);
             display: flex; align-items: center; justify-content: center;
-            position: relative; height: 200px;
+            position: relative; height: 200px; width: 100%;
+            padding: 0 280px; /* Logo ke liye space aur badha diya gaya hai */
         }
-        .part-2 { grid-area: part2; background: rgb(128, 194, 255); padding: 15px; height: calc(100vh - 200px); overflow-y: auto; }
-        .part-3 { grid-area: part3; background: rgb(152, 229, 255); padding: 15px; height: calc(100vh - 200px); overflow-y: auto; }
+        .part-2 { grid-area: part2; background: rgb(128, 194, 255); padding: 15px; overflow-y: auto; }
+        .part-3 { grid-area: part3; background: rgb(152, 229, 255); padding: 15px; overflow-y: auto; }
+        
         .switch-container { display: flex; justify-content: space-between; gap: 12px; margin-top: 15px; }
         .switch-btn {
             flex: 1; padding: 10px 5px; background-color: #1f51ff; color: #ffffff;
@@ -36,15 +39,20 @@
             font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; display: block;
         }
         .switch-btn.active { background-color: #ff9800; border-color: #b36b00; }
-        .left-logo { position: absolute; top: 40px; left: 220px; }
-        .left-logo img { width: 110px; height: auto; display: block; }
-        .right-logo { position: absolute; top: 40px; right: 220px; }
-        .right-logo img { width: 200px; height: auto; display: block; }
-        .center-text-container { text-align: center; color: #ffff00; font-weight: bold; }
-        .hindi-text { font-family: 'Aparajita', 'Tiro Devanagari Hindi', sans-serif; font-size: 32px; margin-bottom: 2px; white-space: nowrap; }
-        .english-text { font-family: 'Cambria', Georgia, serif; font-size: 26px; margin-bottom: 15px; white-space: nowrap; }
-        .sub-header-text { font-family: 'Cambria', Georgia, serif; font-size: 24px; color: #5C2C14; white-space: nowrap; }
-        .boxes-grid { display: grid; grid-template-columns: repeat(4, 1fr); row-gap: 20px; column-gap: 30px; width: 100%; }
+        
+        /* Dono logo ko aur andar ki taraf khiska diya gaya hai */
+        .left-logo { position: absolute; top: 35px; left: 150px; }
+        .left-logo img { width: 95px; height: auto; display: block; }
+        
+        .right-logo { position: absolute; top: 35px; right: 150px; }
+        .right-logo img { width: 150px; height: auto; display: block; }
+        
+        .center-text-container { text-align: center; color: #ffff00; font-weight: bold; width: 100%; }
+        .hindi-text { font-family: 'Aparajita', 'Tiro Devanagari Hindi', sans-serif; font-size: 30px; margin-bottom: 2px; }
+        .english-text { font-family: 'Cambria', Georgia, serif; font-size: 25px; margin-bottom: 8px; }
+        .sub-header-text { font-family: 'Cambria', Georgia, serif; font-size: 20px; color: #5C2C14; }
+        
+        .boxes-grid { display: grid; grid-template-columns: repeat(4, 1fr); row-gap: 20px; column-gap: 20px; width: 100%; }
         
         .box-card {
             display: flex; flex-direction: column; align-items: center; width: 100%; padding: 6px;
@@ -52,7 +60,6 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7), 0 4px 8px rgba(0, 0, 0, 0.5);
             background: transparent;
             transition: transform 0.1s ease;
-            cursor: pointer;
         }
 
         .box-card:hover {
@@ -71,7 +78,7 @@
         .sky-blue-box {
             width: 100%; height: 38px; border: 2px solid #5C2C14; border-radius: 6px;
             background-color: #A0522D; display: flex; align-items: center; justify-content: center;
-            font-family: 'Cambria', Georgia, serif; font-size: 22px; font-weight: bold; 
+            font-family: 'Cambria', Georgia, serif; font-size: 18px; font-weight: bold; 
             color: blue !important; margin-bottom: 4px;
         }
 
@@ -83,7 +90,7 @@
         }
 
         #set-8 .sky-blue-box { background-color: pink !important; color: blue !important; border-color: #c71585 !important; }
-        
+
         #set-9 .sky-blue-box, #set-10 .sky-blue-box, #set-11 .sky-blue-box, #set-12 .sky-blue-box {
             background-color: #90ee90 !important; color: blue !important; border-color: #2e8b57 !important;
         }
@@ -96,49 +103,66 @@
         .sky-blue-box-21, .sky-blue-box-3 {
             width: 50%; height: 30px; border: 2px solid rgb(175, 163, 163); border-radius: 6px;
             display: flex; align-items: center; justify-content: center; color: white;
-            font-family: 'Cambria', Georgia, serif; font-size: 15px; font-weight: bold;
+            font-family: 'Cambria', Georgia, serif; font-size: 14px; font-weight: bold;
         }
         .sub-boxes-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 100%; }
         .sub-boxes-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%; }
         .mini-box {
             height: 30px; border: 2px solid rgb(175, 163, 163); display: flex; align-items: center;
             justify-content: center; color: #ffffff; font-family: 'Cambria', Georgia, serif;
-            font-size: 14px; font-weight: bold; border-radius: 6px;
+            font-size: 13px; font-weight: bold; border-radius: 6px;
         }
-        .custom-table { width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 4px; font-family: 'Cambria', Georgia, serif; font-size: 14px; text-align: center; }
+        .custom-table { width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 4px; font-family: 'Cambria', Georgia, serif; font-size: 13px; text-align: center; }
         .table-second { margin-top: 15px; }
-        .custom-table th, .custom-table td { border: 1px solid #999; border-radius: 8px; padding: 8px 4px; height: 34px; background-color: #ffffff; vertical-align: middle; }
+        .custom-table th, .custom-table td { border: 1px solid #999; border-radius: 8px; padding: 6px 2px; height: 32px; background-color: #ffffff; vertical-align: middle; }
         .custom-table th { background-color: #1f51ff; color: #ffffff; border-color: #001f3f; }
         
         .staff-data-row td {
-            background-color: #ffffff; color: #000000; font-weight: bold; font-size: 16px; border: 2px solid rgb(175, 163, 163);
+            background-color: #ffffff; color: #000000; font-weight: bold; font-size: 14px;
+            border: 2px solid rgb(175, 163, 163);
         }
 
         .has-value { background-color: #dc3545 !important; color: #ffffff !important; border-color: #a71d2a !important; }
         .is-empty { background-color: #28a745 !important; color: #ffffff !important; border-color: #1e7e34 !important; }
 
-        /* पॉप-अप मॉडल स्टाइल */
-        .popup-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.7); z-index: 9999; justify-content: center; align-items: center;
+        /* ================= MOBILE RESPONSIVE MEDIA QUERY ================= */
+        @media screen and (max-width: 1024px) {
+            .layout-container {
+                grid-template-rows: auto auto auto;
+                grid-template-columns: 100%;
+                grid-template-areas: 
+                    "part1"
+                    "part2"
+                    "part3";
+                height: auto;
+                overflow-y: auto;
+            }
+            .part-1 {
+                height: auto;
+                padding: 20px 10px;
+                flex-direction: column;
+            }
+            .left-logo, .right-logo {
+                position: static;
+                margin-bottom: 8px;
+            }
+            .left-logo img { width: 70px; }
+            .right-logo img { width: 110px; }
+            .center-text-container { padding: 0; }
+            .hindi-text { font-size: 18px; }
+            .english-text { font-size: 13px; }
+            .sub-header-text { font-size: 13px; }
+            
+            .boxes-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
-        .popup-box {
-            background: #ffffff; width: 420px; padding: 22px; border-radius: 12px;
-            border: 3px solid #1f51ff; font-family: 'Cambria', Georgia, serif;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.6); position: relative;
+
+        @media screen and (max-width: 600px) {
+            .boxes-grid {
+                grid-template-columns: 1fr;
+            }
         }
-        .popup-header {
-            font-size: 20px; font-weight: bold; color: #1f51ff; margin-bottom: 15px;
-            text-align: center; border-bottom: 2px solid #ddd; padding-bottom: 8px;
-        }
-        .popup-content p { font-size: 16px; margin: 12px 0; color: #333; font-weight: bold; }
-        .popup-content span { color: #d9534f; background: #f8f9fa; padding: 2px 6px; border-radius: 4px; }
-        .popup-close-btn {
-            display: block; width: 100%; margin-top: 20px; padding: 10px;
-            background-color: #dc3545; color: white; border: none; border-radius: 6px;
-            font-size: 16px; font-weight: bold; cursor: pointer; text-align: center;
-        }
-        .popup-close-btn:hover { background-color: #c82333; }
     </style>
 </head>
 
@@ -164,7 +188,9 @@
                     <tr><th>LPP/M</th><th>LPG</th><th>ALP</th><th>TM</th></tr>
                 </thead>
                 <tbody id="staff-tbody">
-                    <tr class="staff-data-row"><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+                    <tr class="staff-data-row">
+                        <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -184,19 +210,6 @@
         </div>
     </div>
 
-    <!-- पॉप-अप बॉक्स स्ट्रक्चर -->
-    <div class="popup-overlay" id="roomPopup">
-        <div class="popup-box">
-            <div class="popup-header" id="popupRoomTitle">ROOM INFO</div>
-            <div class="popup-content">
-                <p>1. DATE: <span id="popupDate">-</span></p>
-                <p>2. LP NAME / LPHQ: <span id="popupLp">-</span></p>
-                <p>3. ALP NAME / ALPHQ: <span id="popupAlp">-</span></p>
-            </div>
-            <button class="popup-close-btn" onclick="closePopup()">बंद करें (Close)</button>
-        </div>
-    </div>
-
     <script>
         const roomNames = {
             1: "ROOM NO. - 1", 2: "ROOM NO. - 2", 3: "ROOM NO. - 3", 4: "ROOM NO. - 4",
@@ -207,8 +220,6 @@
             21: "ROOM NO. - 12", 22: "ROOM NO. - M.1"
         };
 
-        let globalSheetData = [];
-
         function generate22Sets() {
             const gridContainer = document.querySelector('.boxes-grid');
             gridContainer.innerHTML = '';
@@ -217,13 +228,13 @@
                 const roomTitle = roomNames[i] || '';
 
                 if (i >= 17 && i <= 20) {
-                    cardHTML = `<div class="box-card" id="set-${i}" onclick="openPopup(${i})"><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes-4"><div class="mini-box box-1">-</div><div class="mini-box box-2">-</div><div class="mini-box box-3">-</div><div class="mini-box box-4">-</div></div></div>`;
+                    cardHTML = `<div class="box-card" id="set-${i}"><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes-4"><div class="mini-box box-1">-</div><div class="mini-box box-2">-</div><div class="mini-box box-3">-</div><div class="mini-box box-4">-</div></div></div>`;
                 } else if (i === 21 || i === 22) {
-                    cardHTML = `<div class="box-card" id="set-${i}" onclick="openPopup(${i})"><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes-3"><div class="mini-box box-1">-</div><div class="mini-box box-2">-</div><div class="mini-box box-3">-</div></div></div>`;
+                    cardHTML = `<div class="box-card" id="set-${i}"><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes-3"><div class="mini-box box-1">-</div><div class="mini-box box-2">-</div><div class="mini-box box-3">-</div></div></div>`;
                 } else if (i >= 9 && i <= 16) {
-                    cardHTML = `<div class="box-card" id="set-${i}" onclick="openPopup(${i})"><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes-4" style="grid-template-columns: 1fr 1fr;"><div class="mini-box box-1">-</div><div class="mini-box box-2">-</div></div></div>`;
+                    cardHTML = `<div class="box-card" id="set-${i}"><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes-4" style="grid-template-columns: 1fr 1fr;"><div class="mini-box box-1">-</div><div class="mini-box box-2">-</div></div></div>`;
                 } else {
-                    cardHTML = `<div class="box-card" id="set-${i}" onclick="openPopup(${i})"><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes"><div class="sky-blue-box-21 box-1">-</div><div class="sky-blue-box-3 box-2">-</div></div></div>`;
+                    cardHTML = `<div class="box-card" id="set-${i}"><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes"><div class="sky-blue-box-21 box-1">-</div><div class="sky-blue-box-3 box-2">-</div></div></div>`;
                 }
                 gridContainer.insertAdjacentHTML('beforeend', cardHTML);
             }
@@ -235,7 +246,9 @@
                 let timePart = val.split('T')[1];
                 if (timePart) {
                     let parts = timePart.split(':');
-                    if (parts.length >= 2) return parts[0] + ':' + parts[1];
+                    if (parts.length >= 2) {
+                        return parts[0] + ':' + parts[1];
+                    }
                 }
             }
             return val;
@@ -255,64 +268,8 @@
             }
         }
 
-        // पॉप-अप ओपन करने का मुख्य फंक्शन (जिसमें बैकअप लॉजिक भी है)
-        function openPopup(secId) {
-            const popup = document.getElementById('roomPopup');
-            const titleEl = document.getElementById('popupRoomTitle');
-            const dateEl = document.getElementById('popupDate');
-            const lpEl = document.getElementById('popupLp');
-            const alpEl = document.getElementById('popupAlp');
-
-            titleEl.innerText = roomNames[secId] || (`ROOM NO. - ${secId}`);
-
-            let dataRowIndex = getRowIndexForSector(secId);
-            let foundDate = '-', foundLp = '-', foundAlp = '-';
-
-            // 1. अगर गूगल शीट का डेटा उपलब्ध है
-            if (globalSheetData && globalSheetData[dataRowIndex]) {
-                let row = globalSheetData[dataRowIndex];
-                // यहाँ कॉलम नंबर सेट किए गए हैं: [1] Date, [2] LP, [3] ALP (आप इन्हें अपनी शीट के हिसाब से बदल सकते हैं)
-                foundDate = row[1] !== undefined && row[1] !== "" ? row[1] : '-';
-                foundLp = row[2] !== undefined && row[2] !== "" ? row[2] : '-';
-                foundAlp = row[3] !== undefined && row[3] !== "" ? row[3] : '-';
-            }
-
-            // 2. यदि शीट से डेटा नहीं मिला, तो कार्ड के अंदर मौजूद बॉक्स से वैल्यू ले लेंगे (ताकि पॉप-अप खाली न दिखे)
-            if (foundDate === '-' && foundLp === '-' && foundAlp === '-') {
-                let card = document.getElementById(`set-${secId}`);
-                if (card) {
-                    let box1 = card.querySelector('.box-1');
-                    let box2 = card.querySelector('.box-2');
-                    if (box1) foundLp = box1.innerText;
-                    if (box2) foundAlp = box2.innerText;
-                }
-            }
-
-            dateEl.innerText = foundDate;
-            lpEl.innerText = foundLp;
-            alpEl.innerText = foundAlp;
-
-            popup.style.display = 'flex';
-        }
-
-        function closePopup() {
-            document.getElementById('roomPopup').style.display = 'none';
-        }
-
-        function getRowIndexForSector(secId) {
-            const mapping = {
-                1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8,
-                9: 22, 10: 23, 11: 24, 12: 25, 13: 26, 14: 27, 
-                15: 31, 16: 32, 17: 9, 18: 13, 19: 17, 20: 28, 
-                21: 21, 22: 30
-            };
-            return mapping[secId] || 1;
-        }
-
         window.handleSheetData = function(data) {
-            console.log("डेटा सफलतापूर्वक मिल गया:", data);
             if (!data || !Array.isArray(data)) return;
-            globalSheetData = data; 
 
             const mapping = {
                 1: { rowIndex: 1, fCol: 5, hCol: 7 }, 
@@ -334,9 +291,22 @@
                 17: { rows: [9, 10, 11, 12], col: 9 },
                 18: { rows: [13, 14, 15, 16], col: 9 },
                 19: { rows: [17, 18, 19, 20], col: 9 },
-                20: { cells: [{ r: 28, c: 5 }, { r: 28, c: 7 }, { r: 29, c: 5 }, { r: 29, c: 7 }] },
-                21: { cells: [{ r: 21, c: 5 }, { r: 21, c: 7 }, { r: 21, c: 9 }] },
-                22: { cells: [{ r: 30, c: 5 }, { r: 30, c: 7 }, { r: 30, c: 9 }] }
+                20: {
+                    cells: [
+                        { r: 28, c: 5 }, { r: 28, c: 7 }, 
+                        { r: 29, c: 5 }, { r: 29, c: 7 }
+                    ]
+                },
+                21: {
+                    cells: [
+                        { r: 21, c: 5 }, { r: 21, c: 7 }, { r: 21, c: 9 }
+                    ]
+                },
+                22: {
+                    cells: [
+                        { r: 30, c: 5 }, { r: 30, c: 7 }, { r: 30, c: 9 }
+                    ]
+                }
             };
 
             for (let secId in mapping) {
@@ -350,7 +320,8 @@
                         let boxNum = idx + 1;
                         let boxEl = card.querySelector(`.box-${boxNum}`);
                         if (boxEl && data[cellInfo.r]) {
-                            setBoxValueAndColor(boxEl, data[cellInfo.r][cellInfo.c]);
+                            let val = data[cellInfo.r][cellInfo.c];
+                            setBoxValueAndColor(boxEl, val);
                         }
                     }
                 } 
@@ -360,13 +331,20 @@
                         let boxNum = idx + 1;
                         let boxEl = card.querySelector(`.box-${boxNum}`);
                         if (boxEl && data[rIdx]) {
-                            setBoxValueAndColor(boxEl, data[rIdx][map.col]);
+                            let val = data[rIdx][map.col];
+                            setBoxValueAndColor(boxEl, val);
                         }
                     }
                 } else {
                     if (data[map.rowIndex]) {
-                        setBoxValueAndColor(card.querySelector('.box-1'), data[map.rowIndex][map.fCol]);
-                        setBoxValueAndColor(card.querySelector('.box-2'), data[map.rowIndex][map.hCol]);
+                        let box1 = card.querySelector('.box-1');
+                        let box2 = card.querySelector('.box-2');
+
+                        let val1 = data[map.rowIndex][map.fCol];
+                        let val2 = data[map.rowIndex][map.hCol];
+
+                        setBoxValueAndColor(box1, val1);
+                        setBoxValueAndColor(box2, val2);
                     }
                 }
             }
@@ -374,12 +352,17 @@
             const staffTbody = document.getElementById('staff-tbody');
             if (staffTbody) {
                 staffTbody.innerHTML = '';
-                let r = 17, rowHtml = '<tr class="staff-data-row">';
+                let r = 17;
+                let rowHtml = '<tr class="staff-data-row">';
                 for (let c = 16; c <= 22; c++) {
-                    let cellVal = (data[r] && data[r][c] !== undefined && data[r][c] !== null && data[r][c] !== "") ? data[r][c] : '-';
+                    let cellVal = '-';
+                    if (data[r] && data[r][c] !== undefined && data[r][c] !== null && data[r][c] !== "") {
+                        cellVal = data[r][c];
+                    }
                     rowHtml += `<td>${cellVal}</td>`;
                 }
-                staffTbody.insertAdjacentHTML('beforeend', rowHtml + '</tr>');
+                rowHtml += '</tr>';
+                staffTbody.insertAdjacentHTML('beforeend', rowHtml);
             }
 
             const tbody = document.getElementById('q2u10-tbody');
@@ -388,16 +371,21 @@
                 for (let r = 1; r <= 10; r++) {
                     let rowHtml = '<tr>';
                     for (let c = 16; c <= 22; c++) {
-                        let cellVal = (data[r] && data[r][c] !== undefined && data[r][c] !== null && data[r][c] !== "") ? formatTimeToHHMM(data[r][c]) : '-';
+                        let cellVal = '-';
+                        if (data[r] && data[r][c] !== undefined && data[r][c] !== null && data[r][c] !== "") {
+                            cellVal = formatTimeToHHMM(data[r][c]);
+                        }
                         rowHtml += `<td>${cellVal}</td>`;
                     }
-                    tbody.insertAdjacentHTML('beforeend', rowHtml + '</tr>');
+                    rowHtml += '</tr>';
+                    tbody.insertAdjacentHTML('beforeend', rowHtml);
                 }
             }
         };
 
         window.onload = function () {
             generate22Sets();
+
             const scriptUrl = "https://script.google.com/macros/s/AKfycbxpBqQu6xrd0QoL6pj54OSgkkv0pncLV-8kh5q16K4hnmu-pPSgvNKGUoBP9C_62Kn7Dg/exec?callback=handleSheetData";
 
             let script = document.createElement('script');
