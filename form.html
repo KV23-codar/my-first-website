@@ -1,70 +1,298 @@
-function doGet(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Table1");
-  if(!sheet) sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  
-  var data = sheet.getRange("A1:O33").getValues();
-  return ContentService.createTextOutput(JSON.stringify(data))
-         .setMimeType(ContentService.MimeType.JSON);
-}
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Management Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; }
+        .container { max-width: 850px; background: #fff; padding: 25px; margin: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2, h3 { text-align: center; color: #333; }
+        
+        .grid-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; margin-bottom: 15px; }
+        .room-box { padding: 18px 10px; text-align: center; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 15px; color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: 0.2s; }
+        .room-box.green { background-color: #28a745; } 
+        .room-box.green:hover { background-color: #218838; }
+        .room-box.red { background-color: #dc3545; }   
+        .room-box.red:hover { background-color: #c82333; }
 
-function doPost(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Table1");
-  if(!sheet) sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  
-  var data = JSON.parse(e.postData.contents);
-  var action = data.action; 
-  var roomNo = String(data.roomNo).trim();
-  
-  var rows = sheet.getRange("A1:O33").getValues();
-  var targetRow = -1;
-  
-  for (var i = 1; i < rows.length; i++) {
-    if (String(rows[i][1]).trim() === roomNo) {
-      targetRow = i + 1; 
-      break;
-    }
-  }
-  
-  if (targetRow !== -1) {
-    // Agar action 'checkin' ya 'overwrite' hai toh data update/save kar do bina error ke
-    if (action === 'checkin' || action === 'overwrite') {
-      var checkInTime = new Date();
-      sheet.getRange(targetRow, 1).setValue(checkInTime); 
-      sheet.getRange(targetRow, 3).setValue(data.date1);   
-      sheet.getRange(targetRow, 4).setValue(data.trainNo || "");
-      sheet.getRange(targetRow, 5).setValue(data.lpName || "");
-      sheet.getRange(targetRow, 6).setValue(data.lpHq || "");
-      sheet.getRange(targetRow, 7).setValue(data.alpName || "");
-      sheet.getRange(targetRow, 8).setValue(data.alpHq || "");
-      sheet.getRange(targetRow, 9).setValue(data.tmName || "");
-      sheet.getRange(targetRow, 10).setValue(data.tmHq || "");
-      sheet.getRange(targetRow, 11).setValue(data.signOffTime || "");
-    } 
-    else if (action === 'checkout') {
-      var checkOutTime = new Date();
-      sheet.getRange(targetRow, 12).setValue(data.date2 || "");     
-      sheet.getRange(targetRow, 13).setValue(data.toTime || "");    
-      sheet.getRange(targetRow, 14).setValue(data.signOnTime || "");
-      sheet.getRange(targetRow, 15).setValue(checkOutTime);         
-      
-      var completedRowData = sheet.getRange(targetRow, 1, 1, 15).getValues();
-      
-      var existingRow41 = sheet.getRange(41, 1).getValue();
-      if (existingRow41 !== "" && existingRow41 !== null) {
-        var lastRow = sheet.getLastRow();
-        if (lastRow >= 41) {
-          var rangeToMove = sheet.getRange(41, 1, lastRow - 40 + 1, 15);
-          rangeToMove.copyTo(sheet.getRange(42, 1));
+        .switch-section { text-align: center; margin-bottom: 25px; }
+        .index-switch-btn { display: inline-block; background-color: #17a2b8; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: 0.2s; }
+        .index-switch-btn:hover { background-color: #138496; }
+
+        .action-section, .form-section { display: none; border-top: 2px solid #dee2e6; padding-top: 20px; }
+        .btn-group { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+        .action-btn { padding: 12px 25px; font-size: 16px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; color: white; }
+        .checkin-btn { background-color: #007bff; }
+        .checkout-btn { background-color: #ffc107; color: #333; }
+
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #495057; font-size: 14px; }
+        input { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        
+        .submit-btn { width: 100%; background-color: #28a745; color: white; padding: 12px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .back-btn { background-color: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; font-weight: bold; }
+        .error-msg { color: #dc3545; text-align: center; margin-top: 15px; font-weight: bold; font-size: 16px; background: #f8d7da; padding: 10px; border-radius: 4px; display: none; }
+        .success-msg { color: #28a745; text-align: center; margin-top: 15px; font-weight: bold; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🏨 Table1 Room Status Dashboard</h2>
+    <p style="text-align: center; color: #666;">🟢 Hara = Khali Room | 🔴 Lal = Bhara Room</p>
+    
+    <div class="grid-container" id="roomGrid">Loading rooms...</div>
+
+    <div class="switch-section" id="switchSection">
+        <a href="index.html" class="index-switch-btn">🔄 Switch to Index Page</a>
+    </div>
+
+    <div class="action-section" id="actionSection">
+        <button class="back-btn" onclick="goBackToGrid()">← Room List Par Jayein</button>
+        <h3>Selected Room: <span id="activeRoomTitle" style="color: #007bff;"></span></h3>
+        <div id="errorAlert" class="error-msg"></div>
+        <div class="btn-group">
+            <button class="action-btn checkin-btn" onclick="selectAction('checkin')">Check In</button>
+            <button class="action-btn checkout-btn" onclick="selectAction('checkout')">Check Out</button>
+        </div>
+    </div>
+
+    <div class="form-section" id="formSection">
+        <button class="back-btn" onclick="backToActionChoice()">← Peeche Jayein</button>
+        <h3 id="formTitle">Form</h3>
+        
+        <form id="dataForm">
+            <div id="formFieldsContainer"></div>
+            <button type="submit" class="submit-btn" id="submitBtnText">Table Me Save Karein</button>
+            <p id="msg" class="success-msg"></p>
+        </form>
+    </div>
+</div>
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxLI8WsbY56qBzbx_Dn0dz57yPAg19gCkalnYqaDtXJdAkFxeix_sPH4Stxn6-4EaKrbA/exec';
+
+    const rooms = [
+        1, 2, 3, 4, 5, 6, 7, 8, 
+        "9 A", "9 B", "9 C", "9 D", 
+        "10 A", "10 B", "10 C", "10 D", 
+        "11 A", "11 B", "11 C", "11 D", 
+        12, 13, 14, 15, 16, 17, 18, 
+        "19 A", "19 B", 
+        "M 1", "M 2", "M 3"
+    ];
+
+    let currentRoom = "";
+    let currentAction = "";
+    let globalStatusMap = {};
+
+    function fetchRoomStatus() {
+        if(!scriptURL || scriptURL.includes('YAHAN')) {
+            document.getElementById('roomGrid').innerHTML = '<p style="color:red; text-align:center; grid-column: span 4;">Kripya scriptURL me apna Web App URL daalein!</p>';
+            return;
         }
-      }
-      
-      sheet.getRange(41, 1, 1, 15).setValues(completedRowData);
-      
-      sheet.getRange(targetRow, 1).setValue(""); 
-      sheet.getRange(targetRow, 3, 1, 13).clearContent(); 
+
+        fetch(scriptURL)
+        .then(res => res.json())
+        .then(data => {
+            globalStatusMap = {};
+            for(let i = 1; i < data.length; i++) {
+                let rNo = String(data[i][1]).trim(); 
+                let date1 = data[i][2];              
+                
+                if(date1 && String(date1).trim() !== "") {
+                    globalStatusMap[rNo] = true; 
+                }
+            }
+            buildGrid(globalStatusMap);
+        })
+        .catch(err => {
+            console.error("Status fetch error:", err);
+            document.getElementById('roomGrid').innerHTML = '<p style="color:red; text-align:center; grid-column: span 4;">Data load karne me samasya aayi.</p>';
+        });
     }
-  }
-  
-  return ContentService.createTextOutput(JSON.stringify({"status": "success"}))
-         .setMimeType(ContentService.MimeType.JSON);
-}
+
+    function buildGrid(statusMap) {
+        const gridContainer = document.getElementById('roomGrid');
+        gridContainer.innerHTML = '';
+        
+        rooms.forEach(room => {
+            let rStr = String(room).trim();
+            let isOccupied = statusMap[rStr] || false;
+            
+            let div = document.createElement('div');
+            div.className = `room-box ${isOccupied ? 'red' : 'green'}`;
+            div.innerHTML = `${room}<br><small>${isOccupied ? 'Bhara Hai' : 'Khali'}</small>`;
+            div.onclick = () => openActionChoice(room);
+            gridContainer.appendChild(div);
+        });
+    }
+
+    fetchRoomStatus();
+
+    function openActionChoice(roomNo) {
+        currentRoom = roomNo;
+        document.getElementById('roomGrid').style.display = 'none';
+        document.getElementById('switchSection').style.display = 'none'; 
+        document.getElementById('actionSection').style.display = 'block';
+        document.getElementById('activeRoomTitle').innerText = roomNo;
+        document.getElementById('errorAlert').style.display = 'none'; 
+    }
+
+    function goBackToGrid() {
+        document.getElementById('actionSection').style.display = 'none';
+        document.getElementById('formSection').style.display = 'none';
+        document.getElementById('roomGrid').style.display = 'grid';
+        document.getElementById('switchSection').style.display = 'block'; 
+        fetchRoomStatus();
+    }
+
+    function backToActionChoice() {
+        document.getElementById('formSection').style.display = 'none';
+        document.getElementById('actionSection').style.display = 'block';
+        document.getElementById('msg').innerText = '';
+    }
+
+    function selectAction(action) {
+        let rStr = String(currentRoom).trim();
+        let isOccupied = globalStatusMap[rStr] || false;
+        let errorBox = document.getElementById('errorAlert');
+
+        if (!isOccupied && action === 'checkout') {
+            errorBox.innerText = "⚠️ Error: Yeh room pehle se hi KHALI hai! Aap iska Check-Out nahi kar sakte.";
+            errorBox.style.display = 'block';
+            return;
+        }
+
+        // Agar room pehle se bhara hai aur user Check-In dabata hai, toh Overwrite ka permission pucho
+        if (isOccupied && action === 'checkin') {
+            let confirmOverwrite = confirm("⚠️ Yeh room pehle se BHARA hua hai!\n\nKya aap purani entry ko sudharkar naya data Overwrite (Update) karna chahte hain?");
+            if (confirmOverwrite) {
+                currentAction = 'overwrite'; // Action ko overwrite set kar diya
+                errorBox.style.display = 'none';
+                document.getElementById('actionSection').style.display = 'none';
+                document.getElementById('formSection').style.display = 'block';
+                determineCheckInForm(currentRoom);
+                return;
+            } else {
+                return; // Agar cancel kiya toh kuch nahi hoga
+            }
+        }
+
+        errorBox.style.display = 'none';
+        currentAction = action;
+        document.getElementById('actionSection').style.display = 'none';
+        document.getElementById('formSection').style.display = 'block';
+        
+        if (action === 'checkout') {
+            renderCheckOutForm();
+        } else {
+            determineCheckInForm(currentRoom);
+        }
+    }
+
+    function determineCheckInForm(room) {
+        let rStr = String(room).trim();
+        if (
+            (typeof room === 'number' && room >= 1 && room <= 8) ||
+            (typeof room === 'number' && room >= 13 && room <= 18) ||
+            rStr === "19 A" || rStr === "19 B" || rStr === "M 2" || rStr === "M 3"
+        ) {
+            renderForm1();
+        } else if (rStr.startsWith("9") || rStr.startsWith("10") || rStr.startsWith("11")) {
+            renderForm2();
+        } else if (room == 12 || rStr === "M 1") {
+            renderForm3();
+        } else {
+            renderForm1();
+        }
+    }
+
+    function renderForm1() {
+        document.getElementById('formTitle').innerText = `Check-In Form (Room: ${currentRoom})`;
+        document.getElementById('formFieldsContainer').innerHTML = `
+            <div class="form-group"><label>DATE (Date1)</label><input type="date" id="date1" required></div>
+            <div class="form-group"><label>TRAIN NO.</label><input type="text" id="trainNo" required></div>
+            <div class="form-group"><label>LP NAME</label><input type="text" id="lpName" required></div>
+            <div class="form-group"><label>LP HQ</label><input type="text" id="lpHq" required></div>
+            <div class="form-group"><label>ALP NAME</label><input type="text" id="alpName" required></div>
+            <div class="form-group"><label>ALP HQ</label><input type="text" id="alpHq" required></div>
+            <div class="form-group"><label>SIGN OFF TIME</label><input type="time" id="signOffTime" required></div>
+        `;
+    }
+
+    function renderForm2() {
+        document.getElementById('formTitle').innerText = `Check-In Form (Room: ${currentRoom})`;
+        document.getElementById('formFieldsContainer').innerHTML = `
+            <div class="form-group"><label>DATE (Date1)</label><input type="date" id="date1" required></div>
+            <div class="form-group"><label>TRAINNO.</label><input type="text" id="trainNo" required></div>
+            <div class="form-group"><label>TM NAME</label><input type="text" id="tmName" required></div>
+            <div class="form-group"><label>TM HQ</label><input type="text" id="tmHq" required></div>
+            <div class="form-group"><label>SIGN OFF TIME</label><input type="time" id="signOffTime" required></div>
+        `;
+    }
+
+    function renderForm3() {
+        document.getElementById('formTitle').innerText = `Check-In Form (Room: ${currentRoom})`;
+        document.getElementById('formFieldsContainer').innerHTML = `
+            <div class="form-group"><label>DATE (Date1)</label><input type="date" id="date1" required></div>
+            <div class="form-group"><label>TRAIN NO.</label><input type="text" id="trainNo" required></div>
+            <div class="form-group"><label>LP NAME</label><input type="text" id="lpName" required></div>
+            <div class="form-group"><label>LP HQ</label><input type="text" id="lpHq" required></div>
+            <div class="form-group"><label>ALP NAME</label><input type="text" id="alpName" required></div>
+            <div class="form-group"><label>ALP HQ</label><input type="text" id="alpHq" required></div>
+            <div class="form-group"><label>TM NAME</label><input type="text" id="tmName" required></div>
+            <div class="form-group"><label>TM HQ</label><input type="text" id="tmHq" required></div>
+            <div class="form-group"><label>SIGN OFF TIME</label><input type="time" id="signOffTime" required></div>
+        `;
+    }
+
+    function renderCheckOutForm() {
+        document.getElementById('formTitle').innerText = `Check-Out Form (Room: ${currentRoom})`;
+        document.getElementById('formFieldsContainer').innerHTML = `
+            <div class="form-group"><label>DATE (Date2)</label><input type="date" id="date2" required></div>
+            <div class="form-group"><label>T.O. TIME</label><input type="time" id="toTime" required></div>
+            <div class="form-group"><label>SIGN ON TIME</label><input type="time" id="signOnTime" required></div>
+        `;
+    }
+
+    document.getElementById('dataForm').addEventListener('submit', e => {
+        e.preventDefault();
+        
+        let payload = {
+            action: currentAction,
+            roomNo: currentRoom,
+            date1: document.getElementById('date1') ? document.getElementById('date1').value : "",
+            trainNo: document.getElementById('trainNo') ? document.getElementById('trainNo').value : "",
+            lpName: document.getElementById('lpName') ? document.getElementById('lpName').value : "",
+            lpHq: document.getElementById('lpHq') ? document.getElementById('lpHq').value : "",
+            alpName: document.getElementById('alpName') ? document.getElementById('alpName').value : "",
+            alpHq: document.getElementById('alpHq') ? document.getElementById('alpHq').value : "",
+            tmName: document.getElementById('tmName') ? document.getElementById('tmName').value : "",
+            tmHq: document.getElementById('tmHq') ? document.getElementById('tmHq').value : "",
+            signOffTime: document.getElementById('signOffTime') ? document.getElementById('signOffTime').value : "",
+            date2: document.getElementById('date2') ? document.getElementById('date2').value : "",
+            toTime: document.getElementById('toTime') ? document.getElementById('toTime').value : "",
+            signOnTime: document.getElementById('signOnTime') ? document.getElementById('signOnTime').value : ""
+        };
+
+        fetch(scriptURL, { 
+            method: 'POST', 
+            body: JSON.stringify(payload) 
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('msg').innerText = "Data safaltapoorvak update/save ho gaya!";
+            setTimeout(() => {
+                goBackToGrid();
+            }, 1500);
+        })
+        .catch(err => {
+            alert('Error! Data save nahi ho paya.');
+        });
+    });
+</script>
+
+</body>
+</html>
