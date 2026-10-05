@@ -3,68 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room Management Dashboard</title>
+    <title>ROOM MANAGEMENT DASHBOARD</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; }
-        .container { max-width: 850px; background: #fff; padding: 25px; margin: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h2, h3 { text-align: center; color: #333; }
+        body { font-family: Cambria, Georgia, serif; background-color: #f4f6f9; margin: 0; padding: 10px; text-transform: uppercase; }
+        .container { width: 100%; max-width: 850px; background: #fff; padding: 15px; margin: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); box-sizing: border-box; }
+        h2, h3 { text-align: center; color: #333; font-size: 20px; }
         
-        .grid-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; margin-bottom: 15px; }
-        .room-box { padding: 18px 10px; text-align: center; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 15px; color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: 0.2s; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(75px, 1fr)); gap: 8px; margin-top: 15px; margin-bottom: 15px; }
+        .room-box { padding: 14px 5px; text-align: center; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: 0.2s; word-break: break-word; }
+        .room-box small { font-size: 10px; display: block; margin-top: 2px; }
         .room-box.green { background-color: #28a745; } 
         .room-box.green:hover { background-color: #218838; }
         .room-box.red { background-color: #dc3545; }   
         .room-box.red:hover { background-color: #c82333; }
 
-        .switch-section { text-align: center; margin-bottom: 25px; }
+        .switch-section { text-align: center; margin-bottom: 15px; }
         .index-switch-btn { display: inline-block; background-color: #17a2b8; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: 0.2s; }
         .index-switch-btn:hover { background-color: #138496; }
 
-        .action-section, .form-section { display: none; border-top: 2px solid #dee2e6; padding-top: 20px; }
-        .btn-group { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
-        .action-btn { padding: 12px 25px; font-size: 16px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; color: white; }
+        .action-section, .form-section { display: none; border-top: 2px solid #dee2e6; padding-top: 15px; }
+        .btn-group { display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap; }
+        .action-btn { padding: 10px 20px; font-size: 15px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; color: white; }
         .checkin-btn { background-color: #007bff; }
         .checkout-btn { background-color: #ffc107; color: #333; }
 
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #495057; font-size: 14px; }
-        input { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #495057; font-size: 13px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; font-size: 14px; background-color: #fff; font-family: Cambria, Georgia, serif; text-transform: uppercase; }
         
-        .submit-btn { width: 100%; background-color: #28a745; color: white; padding: 12px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        .back-btn { background-color: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; font-weight: bold; }
-        .error-msg { color: #dc3545; text-align: center; margin-top: 15px; font-weight: bold; font-size: 16px; background: #f8d7da; padding: 10px; border-radius: 4px; display: none; }
-        .success-msg { color: #28a745; text-align: center; margin-top: 15px; font-weight: bold; font-size: 16px; }
+        .submit-btn { width: 100%; background-color: #28a745; color: white; padding: 12px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 10px; font-family: Cambria, Georgia, serif; }
+        .back-btn { background-color: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; font-weight: bold; font-family: Cambria, Georgia, serif; }
+        .error-msg { color: #dc3545; text-align: center; margin-top: 15px; font-weight: bold; font-size: 14px; background: #f8d7da; padding: 10px; border-radius: 4px; display: none; }
+        .success-msg { color: #28a745; text-align: center; margin-top: 15px; font-weight: bold; font-size: 15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>🏨 Table1 Room Status Dashboard</h2>
-    <p style="text-align: center; color: #666;">🟢 Hara = Khali Room | 🔴 Lal = Bhara Room</p>
+    <h2>🏨 ROOM STATUS DASHBOARD</h2>
+    <p style="text-align: center; color: #666; font-size: 13px;">🟢 GREEN = KHALI ROOM | 🔴 RED = BHARA ROOM</p>
     
-    <div class="grid-container" id="roomGrid">Loading rooms...</div>
+    <div class="grid-container" id="roomGrid">LOADING ROOMS...</div>
 
     <div class="switch-section" id="switchSection">
-        <a href="index.html" class="index-switch-btn">🔄 Switch to Index Page</a>
+        <a href="index.html" class="index-switch-btn">🔄 SWITCH TO INDEX PAGE</a>
     </div>
 
     <div class="action-section" id="actionSection">
-        <button class="back-btn" onclick="goBackToGrid()">← Room List Par Jayein</button>
-        <h3>Selected Room: <span id="activeRoomTitle" style="color: #007bff;"></span></h3>
+        <button class="back-btn" onclick="goBackToGrid()">← ROOM LIST PAR JAYEIN</button>
+        <h3>SELECTED ROOM: <span id="activeRoomTitle" style="color: #007bff;"></span></h3>
         <div id="errorAlert" class="error-msg"></div>
         <div class="btn-group">
-            <button class="action-btn checkin-btn" onclick="selectAction('checkin')">Check In</button>
-            <button class="action-btn checkout-btn" onclick="selectAction('checkout')">Check Out</button>
+            <button class="action-btn checkin-btn" onclick="selectAction('checkin')">CHECK IN</button>
+            <button class="action-btn checkout-btn" onclick="selectAction('checkout')">CHECK OUT</button>
         </div>
     </div>
 
     <div class="form-section" id="formSection">
-        <button class="back-btn" onclick="backToActionChoice()">← Peeche Jayein</button>
-        <h3 id="formTitle">Form</h3>
+        <button class="back-btn" onclick="backToActionChoice()">← BACK</button>
+        <h3 id="formTitle">FORM</h3>
         
         <form id="dataForm">
             <div id="formFieldsContainer"></div>
-            <button type="submit" class="submit-btn" id="submitBtnText">Table Me Save Karein</button>
+            <button type="submit" class="submit-btn" id="submitBtnText">SAVE</button>
             <p id="msg" class="success-msg"></p>
         </form>
     </div>
@@ -87,9 +88,19 @@
     let currentAction = "";
     let globalStatusMap = {};
 
+    const hqOptionsHTML = `
+        <option value="">-- SELECT HQ --</option>
+        <option value="USL">USL</option>
+        <option value="PND">PND</option>
+        <option value="BJRI">BJRI</option>
+        <option value="SGO">SGO</option>
+        <option value="SJQ">SJQ</option>
+        <option value="BSP-C">BSP - C</option>
+    `;
+
     function fetchRoomStatus() {
         if(!scriptURL || scriptURL.includes('YAHAN')) {
-            document.getElementById('roomGrid').innerHTML = '<p style="color:red; text-align:center; grid-column: span 4;">Kripya scriptURL me apna Web App URL daalein!</p>';
+            document.getElementById('roomGrid').innerHTML = '<p style="color:red; text-align:center; grid-column: span 4;">KRIPYA SCRIPTURL ME APNA WEB APP URL DAALEIN!</p>';
             return;
         }
 
@@ -109,7 +120,7 @@
         })
         .catch(err => {
             console.error("Status fetch error:", err);
-            document.getElementById('roomGrid').innerHTML = '<p style="color:red; text-align:center; grid-column: span 4;">Data load karne me samasya aayi.</p>';
+            document.getElementById('roomGrid').innerHTML = '<p style="color:red; text-align:center; grid-column: span 4;">DATA LOAD KARNE ME SAMASYA AAYI.</p>';
         });
     }
 
@@ -123,9 +134,10 @@
             
             let div = document.createElement('div');
             div.className = `room-box ${isOccupied ? 'red' : 'green'}`;
-            div.innerHTML = `${room}<br><small>${isOccupied ? 'Bhara Hai' : 'Khali'}</small>`;
-            div.onclick = () => openActionChoice(room);
+            div.innerHTML = `${room}<small>${isOccupied ? 'BHARA HAI' : 'KHALI'}</small>`;
             gridContainer.appendChild(div);
+            
+            div.onclick = () => openActionChoice(room);
         });
     }
 
@@ -160,23 +172,22 @@
         let errorBox = document.getElementById('errorAlert');
 
         if (!isOccupied && action === 'checkout') {
-            errorBox.innerText = "⚠️ Error: Yeh room pehle se hi KHALI hai! Aap iska Check-Out nahi kar sakte.";
+            errorBox.innerText = "⚠️ ERROR: YEH ROOM PEHLE SE HI KHALI HAI! AAP ISKA CHECK-OUT NAHI KAR SAKTE.";
             errorBox.style.display = 'block';
             return;
         }
 
-        // Agar room pehle se bhara hai aur user Check-In dabata hai, toh Overwrite ka permission pucho
         if (isOccupied && action === 'checkin') {
-            let confirmOverwrite = confirm("⚠️ Yeh room pehle se BHARA hua hai!\n\nKya aap purani entry ko sudharkar naya data Overwrite (Update) karna chahte hain?");
+            let confirmOverwrite = confirm("⚠️ YEH ROOM PEHLE SE BHARA HUA HAI!\n\nKYA AAP PURANI ENTRY KO SUDHARKAR NAYA DATA OVERWRITE (UPDATE) KARNA CHAHTE HAIN?");
             if (confirmOverwrite) {
-                currentAction = 'overwrite'; // Action ko overwrite set kar diya
+                currentAction = 'overwrite';
                 errorBox.style.display = 'none';
                 document.getElementById('actionSection').style.display = 'none';
                 document.getElementById('formSection').style.display = 'block';
                 determineCheckInForm(currentRoom);
                 return;
             } else {
-                return; // Agar cancel kiya toh kuch nahi hoga
+                return;
             }
         }
 
@@ -210,48 +221,48 @@
     }
 
     function renderForm1() {
-        document.getElementById('formTitle').innerText = `Check-In Form (Room: ${currentRoom})`;
+        document.getElementById('formTitle').innerText = `CHECK-IN FORM (ROOM: ${currentRoom})`;
         document.getElementById('formFieldsContainer').innerHTML = `
-            <div class="form-group"><label>DATE (Date1)</label><input type="date" id="date1" required></div>
+            <div class="form-group"><label>DATE (DATE1)</label><input type="date" id="date1" required></div>
             <div class="form-group"><label>TRAIN NO.</label><input type="text" id="trainNo" required></div>
             <div class="form-group"><label>LP NAME</label><input type="text" id="lpName" required></div>
-            <div class="form-group"><label>LP HQ</label><input type="text" id="lpHq" required></div>
+            <div class="form-group"><label>LP HQ</label><select id="lpHq" required>${hqOptionsHTML}</select></div>
             <div class="form-group"><label>ALP NAME</label><input type="text" id="alpName" required></div>
-            <div class="form-group"><label>ALP HQ</label><input type="text" id="alpHq" required></div>
+            <div class="form-group"><label>ALP HQ</label><select id="alpHq" required>${hqOptionsHTML}</select></div>
             <div class="form-group"><label>SIGN OFF TIME</label><input type="time" id="signOffTime" required></div>
         `;
     }
 
     function renderForm2() {
-        document.getElementById('formTitle').innerText = `Check-In Form (Room: ${currentRoom})`;
+        document.getElementById('formTitle').innerText = `CHECK-IN FORM (ROOM: ${currentRoom})`;
         document.getElementById('formFieldsContainer').innerHTML = `
-            <div class="form-group"><label>DATE (Date1)</label><input type="date" id="date1" required></div>
-            <div class="form-group"><label>TRAINNO.</label><input type="text" id="trainNo" required></div>
+            <div class="form-group"><label>DATE (DATE1)</label><input type="date" id="date1" required></div>
+            <div class="form-group"><label>TRAIN NO.</label><input type="text" id="trainNo" required></div>
             <div class="form-group"><label>TM NAME</label><input type="text" id="tmName" required></div>
-            <div class="form-group"><label>TM HQ</label><input type="text" id="tmHq" required></div>
+            <div class="form-group"><label>TM HQ</label><select id="tmHq" required>${hqOptionsHTML}</select></div>
             <div class="form-group"><label>SIGN OFF TIME</label><input type="time" id="signOffTime" required></div>
         `;
     }
 
     function renderForm3() {
-        document.getElementById('formTitle').innerText = `Check-In Form (Room: ${currentRoom})`;
+        document.getElementById('formTitle').innerText = `CHECK-IN FORM (ROOM: ${currentRoom})`;
         document.getElementById('formFieldsContainer').innerHTML = `
-            <div class="form-group"><label>DATE (Date1)</label><input type="date" id="date1" required></div>
+            <div class="form-group"><label>DATE (DATE1)</label><input type="date" id="date1" required></div>
             <div class="form-group"><label>TRAIN NO.</label><input type="text" id="trainNo" required></div>
             <div class="form-group"><label>LP NAME</label><input type="text" id="lpName" required></div>
-            <div class="form-group"><label>LP HQ</label><input type="text" id="lpHq" required></div>
+            <div class="form-group"><label>LP HQ</label><select id="lpHq" required>${hqOptionsHTML}</select></div>
             <div class="form-group"><label>ALP NAME</label><input type="text" id="alpName" required></div>
-            <div class="form-group"><label>ALP HQ</label><input type="text" id="alpHq" required></div>
+            <div class="form-group"><label>ALP HQ</label><select id="alpHq" required>${hqOptionsHTML}</select></div>
             <div class="form-group"><label>TM NAME</label><input type="text" id="tmName" required></div>
-            <div class="form-group"><label>TM HQ</label><input type="text" id="tmHq" required></div>
+            <div class="form-group"><label>TM HQ</label><select id="tmHq" required>${hqOptionsHTML}</select></div>
             <div class="form-group"><label>SIGN OFF TIME</label><input type="time" id="signOffTime" required></div>
         `;
     }
 
     function renderCheckOutForm() {
-        document.getElementById('formTitle').innerText = `Check-Out Form (Room: ${currentRoom})`;
+        document.getElementById('formTitle').innerText = `CHECK-OUT FORM (ROOM: ${currentRoom})`;
         document.getElementById('formFieldsContainer').innerHTML = `
-            <div class="form-group"><label>DATE (Date2)</label><input type="date" id="date2" required></div>
+            <div class="form-group"><label>DATE (DATE2)</label><input type="date" id="date2" required></div>
             <div class="form-group"><label>T.O. TIME</label><input type="time" id="toTime" required></div>
             <div class="form-group"><label>SIGN ON TIME</label><input type="time" id="signOnTime" required></div>
         `;
@@ -260,17 +271,20 @@
     document.getElementById('dataForm').addEventListener('submit', e => {
         e.preventDefault();
         
+        // Helper function जो किसी भी text को uppercase में बदल देगा (अगर वह string है)
+        const toUpper = (val) => (val && typeof val === 'string') ? val.toUpperCase() : val;
+
         let payload = {
             action: currentAction,
             roomNo: currentRoom,
             date1: document.getElementById('date1') ? document.getElementById('date1').value : "",
-            trainNo: document.getElementById('trainNo') ? document.getElementById('trainNo').value : "",
-            lpName: document.getElementById('lpName') ? document.getElementById('lpName').value : "",
-            lpHq: document.getElementById('lpHq') ? document.getElementById('lpHq').value : "",
-            alpName: document.getElementById('alpName') ? document.getElementById('alpName').value : "",
-            alpHq: document.getElementById('alpHq') ? document.getElementById('alpHq').value : "",
-            tmName: document.getElementById('tmName') ? document.getElementById('tmName').value : "",
-            tmHq: document.getElementById('tmHq') ? document.getElementById('tmHq').value : "",
+            trainNo: toUpper(document.getElementById('trainNo') ? document.getElementById('trainNo').value : ""),
+            lpName: toUpper(document.getElementById('lpName') ? document.getElementById('lpName').value : ""),
+            lpHq: toUpper(document.getElementById('lpHq') ? document.getElementById('lpHq').value : ""),
+            alpName: toUpper(document.getElementById('alpName') ? document.getElementById('alpName').value : ""),
+            alpHq: toUpper(document.getElementById('alpHq') ? document.getElementById('alpHq').value : ""),
+            tmName: toUpper(document.getElementById('tmName') ? document.getElementById('tmName').value : ""),
+            tmHq: toUpper(document.getElementById('tmHq') ? document.getElementById('tmHq').value : ""),
             signOffTime: document.getElementById('signOffTime') ? document.getElementById('signOffTime').value : "",
             date2: document.getElementById('date2') ? document.getElementById('date2').value : "",
             toTime: document.getElementById('toTime') ? document.getElementById('toTime').value : "",
@@ -283,13 +297,13 @@
         })
         .then(res => res.json())
         .then(data => {
-            document.getElementById('msg').innerText = "Data safaltapoorvak update/save ho gaya!";
+            document.getElementById('msg').innerText = "DATA SAFALTAPOORVAK UPDATE/SAVE HO GAYA!";
             setTimeout(() => {
                 goBackToGrid();
             }, 1500);
         })
         .catch(err => {
-            alert('Error! Data save nahi ho paya.');
+            alert('ERROR! DATA SAVE NAHI HO PAYA.');
         });
     });
 </script>
