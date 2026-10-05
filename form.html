@@ -6,31 +6,60 @@
     <title>ROOM MANAGEMENT DASHBOARD</title>
     <style>
         body { font-family: Cambria, Georgia, serif; background-color: #f4f6f9; margin: 0; padding: 10px; text-transform: uppercase; }
-        .container { width: 100%; max-width: 850px; background: #fff; padding: 15px; margin: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); box-sizing: border-box; }
-        h2, h3 { text-align: center; color: #333; font-size: 20px; }
+        .container { width: 100%; max-width: 850px; background: #fff; padding: 15px; margin: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); box-sizing: border-box; display: none; }
+        
+        /* Custom Single Window Login Modal */
+        #loginModal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .login-card {
+            background: #fff; padding: 25px; border-radius: 10px; width: 100%; max-width: 350px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: center; border-top: 5px solid #1A0CE4;
+        }
+        .login-card h3 { color: #1A0CE4; margin-bottom: 20px; font-size: 18px; }
+        .login-card .form-group { margin-bottom: 15px; text-align: left; }
+        .login-card input { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; font-size: 14px; background-color: #A3F5D7; color: #1A0CE4; font-family: Cambria, Georgia, serif; text-transform: uppercase; }
+        .login-submit-btn { width: 100%; background-color: #28a745; color: white; padding: 12px; border: none; border-radius: 4px; font-size: 15px; cursor: pointer; font-weight: bold; font-family: Cambria, Georgia, serif; }
+        .login-error { color: #dc3545; font-size: 13px; font-weight: bold; margin-top: 10px; display: none; }
+
+        /* User Info & Logout Header Bar */
+        .user-header { display: flex; justify-content: space-between; align-items: center; background-color: #e9ecef; padding: 8px 12px; border-radius: 6px; margin-bottom: 12px; font-size: 13px; font-weight: bold; color: #1A0CE4; }
+        .logout-btn { background-color: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-family: Cambria, Georgia, serif; font-size: 12px; }
+        .logout-btn:hover { background-color: #c82333; }
+
+        h2 { text-align: center; color: #1A0CE4; font-size: 20px; background-color: #38FFE6; padding: 10px; border-radius: 6px; }
+        h3 { text-align: center; color: #1A0CE4; font-size: 20px; }
         
         .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(75px, 1fr)); gap: 8px; margin-top: 15px; margin-bottom: 15px; }
         .room-box { padding: 14px 5px; text-align: center; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: 0.2s; word-break: break-word; }
         .room-box small { font-size: 10px; display: block; margin-top: 2px; }
-        .room-box.green { background-color: #28a745; } 
-        .room-box.green:hover { background-color: #218838; }
-        .room-box.red { background-color: #dc3545; }   
-        .room-box.red:hover { background-color: #c82333; }
+        .room-box.green { background-color: #62F20F; } 
+        .room-box.red { background-color: #E71B32; }   
 
         .switch-section { text-align: center; margin-bottom: 15px; }
         .index-switch-btn { display: inline-block; background-color: #17a2b8; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: 0.2s; }
         .index-switch-btn:hover { background-color: #138496; }
 
         .action-section, .form-section { display: none; border-top: 2px solid #dee2e6; padding-top: 15px; }
+        .form-section { background-color: #9FDDEE; color: #1A0CE4; padding: 15px; border-radius: 8px; }
+        .form-section h3, .form-section label, .action-section h3 { color: #1A0CE4; }
+
         .btn-group { display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap; }
         .action-btn { padding: 10px 20px; font-size: 15px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; color: white; }
         .checkin-btn { background-color: #007bff; }
         .checkout-btn { background-color: #ffc107; color: #333; }
 
         .form-group { margin-bottom: 12px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #495057; font-size: 13px; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; font-size: 14px; background-color: #fff; font-family: Cambria, Georgia, serif; text-transform: uppercase; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px; color: #1A0CE4; }
         
+        .container input, .container select { 
+            width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; 
+            font-size: 14px; background-color: #A3F5D7; color: #1A0CE4; font-family: Cambria, Georgia, serif; text-transform: uppercase; cursor: pointer;
+        }
+        
+        input::placeholder { color: #1A0CE4; opacity: 1; }
+
         .submit-btn { width: 100%; background-color: #28a745; color: white; padding: 12px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 10px; font-family: Cambria, Georgia, serif; }
         .back-btn { background-color: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; font-weight: bold; font-family: Cambria, Georgia, serif; }
         .error-msg { color: #dc3545; text-align: center; margin-top: 15px; font-weight: bold; font-size: 14px; background: #f8d7da; padding: 10px; border-radius: 4px; display: none; }
@@ -39,39 +68,133 @@
 </head>
 <body>
 
-<div class="container">
-    <h2>🏨 ROOM STATUS DASHBOARD</h2>
-    <p style="text-align: center; color: #666; font-size: 13px;">🟢 GREEN = KHALI ROOM | 🔴 RED = BHARA ROOM</p>
-    
-    <div class="grid-container" id="roomGrid">LOADING ROOMS...</div>
-
-    <div class="switch-section" id="switchSection">
-        <a href="index.html" class="index-switch-btn">🔄 SWITCH TO INDEX PAGE</a>
-    </div>
-
-    <div class="action-section" id="actionSection">
-        <button class="back-btn" onclick="goBackToGrid()">← ROOM LIST PAR JAYEIN</button>
-        <h3>SELECTED ROOM: <span id="activeRoomTitle" style="color: #007bff;"></span></h3>
-        <div id="errorAlert" class="error-msg"></div>
-        <div class="btn-group">
-            <button class="action-btn checkin-btn" onclick="selectAction('checkin')">CHECK IN</button>
-            <button class="action-btn checkout-btn" onclick="selectAction('checkout')">CHECK OUT</button>
+    <!-- Single Window Login Modal -->
+    <div id="loginModal">
+        <div class="login-card">
+            <h3>🔐 LOGIN DASHBOARD</h3>
+            <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+                <div class="form-group">
+                    <label>USERNAME</label>
+                    <input type="text" id="loginUser" required placeholder="USERNAME DARJ KAREIN">
+                </div>
+                <div class="form-group">
+                    <label>PASSWORD</label>
+                    <input type="password" id="loginPass" required placeholder="PASSWORD DARJ KAREIN">
+                </div>
+                <button type="submit" class="login-submit-btn">LOGIN</button>
+                <div id="loginErrorMsg" class="login-error">गलत यूजरनेम या पासवर्ड!</div>
+            </form>
         </div>
     </div>
 
-    <div class="form-section" id="formSection">
-        <button class="back-btn" onclick="backToActionChoice()">← BACK</button>
-        <h3 id="formTitle">FORM</h3>
+    <!-- Main Container -->
+    <div class="container" id="mainContainer">
+        <div class="user-header">
+            <span>👤 LOGIN USER: <span id="loggedUserDisplay" style="color: #007bff;"></span></span>
+            <button class="logout-btn" onclick="handleLogout()">🚪 LOGOUT / SWITCH</button>
+        </div>
+
+        <h2>🏨 ROOM STATUS DASHBOARD</h2>
+        <p style="text-align: center; color: #1A0CE4; font-size: 13px;">🟢 GREEN = KHALI ROOM | 🔴 RED = BHARA ROOM</p>
         
-        <form id="dataForm">
-            <div id="formFieldsContainer"></div>
-            <button type="submit" class="submit-btn" id="submitBtnText">SAVE</button>
-            <p id="msg" class="success-msg"></p>
-        </form>
+        <div class="grid-container" id="roomGrid">LOADING ROOMS...</div>
+
+        <div class="switch-section" id="switchSection">
+            <a href="index.html" class="index-switch-btn">🔄 SWITCH TO INDEX PAGE</a>
+        </div>
+
+        <div class="action-section" id="actionSection">
+            <button class="back-btn" onclick="goBackToGrid()">← ROOM LIST PAR JAYEIN</button>
+            <h3>SELECTED ROOM: <span id="activeRoomTitle" style="color: #1A0CE4;"></span></h3>
+            <div id="errorAlert" class="error-msg"></div>
+            <div class="btn-group">
+                <button class="action-btn checkin-btn" onclick="selectAction('checkin')">CHECK IN</button>
+                <button class="action-btn checkout-btn" onclick="selectAction('checkout')">CHECK OUT</button>
+            </div>
+        </div>
+
+        <div class="form-section" id="formSection">
+            <button class="back-btn" onclick="backToActionChoice()">← BACK</button>
+            <h3 id="formTitle">FORM</h3>
+            
+            <form id="dataForm">
+                <div id="formFieldsContainer"></div>
+                <button type="submit" class="submit-btn" id="submitBtnText">SAVE</button>
+                <p id="msg" class="success-msg"></p>
+            </form>
+        </div>
     </div>
-</div>
 
 <script>
+    const users = {
+        "KV23": "2520",
+        "staff1": "pass111",
+        "staff2": "pass222",
+        "naya_naam": "naya_password"
+    };
+
+    let inactivityTimer;
+
+    function resetInactivityTimer() {
+        clearTimeout(inactivityTimer);
+        if (sessionStorage.getItem("currentUser")) {
+            inactivityTimer = setTimeout(() => {
+                alert("⚠️️ 5 minute tak koi activity na hone ke karan aapko auto-logout kar diya gaya hai.");
+                performLogout();
+            }, 300000);
+        }
+    }
+
+    window.onload = function() {
+        const events = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+        events.forEach(event => {
+            window.addEventListener(event, resetInactivityTimer);
+        });
+
+        let savedUser = sessionStorage.getItem("currentUser");
+        if (savedUser && users[savedUser]) {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('loggedUserDisplay').innerText = savedUser;
+            document.getElementById('mainContainer').style.display = 'block';
+            fetchRoomStatus();
+            resetInactivityTimer();
+        } else {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+    };
+
+    function handleLoginSubmit(e) {
+        e.preventDefault();
+        let userInput = document.getElementById('loginUser').value.trim();
+        let passInput = document.getElementById('loginPass').value.trim();
+        let errorBox = document.getElementById('loginErrorMsg');
+
+        if (users[userInput] && users[userInput] === passInput) {
+            sessionStorage.setItem("currentUser", userInput);
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('loggedUserDisplay').innerText = userInput;
+            document.getElementById('mainContainer').style.display = 'block';
+            fetchRoomStatus();
+            resetInactivityTimer();
+        } else {
+            errorBox.style.display = 'block';
+            document.getElementById('loginPass').value = "";
+        }
+    }
+
+    function performLogout() {
+        sessionStorage.removeItem("currentUser");
+        clearTimeout(inactivityTimer);
+        window.location.href = "index.html";
+    }
+
+    function handleLogout() {
+        let confirmLogout = confirm("Kya aap sach mein logout karna chahte hain?");
+        if (confirmLogout) {
+            performLogout();
+        }
+    }
+
     const scriptURL = 'https://script.google.com/macros/s/AKfycbxLI8WsbY56qBzbx_Dn0dz57yPAg19gCkalnYqaDtXJdAkFxeix_sPH4Stxn6-4EaKrbA/exec';
 
     const rooms = [
@@ -140,8 +263,6 @@
             div.onclick = () => openActionChoice(room);
         });
     }
-
-    fetchRoomStatus();
 
     function openActionChoice(roomNo) {
         currentRoom = roomNo;
@@ -271,7 +392,6 @@
     document.getElementById('dataForm').addEventListener('submit', e => {
         e.preventDefault();
         
-        // Helper function जो किसी भी text को uppercase में बदल देगा (अगर वह string है)
         const toUpper = (val) => (val && typeof val === 'string') ? val.toUpperCase() : val;
 
         let payload = {
