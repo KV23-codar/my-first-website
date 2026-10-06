@@ -139,7 +139,7 @@
         clearTimeout(inactivityTimer);
         if (sessionStorage.getItem("currentUser")) {
             inactivityTimer = setTimeout(() => {
-                alert("⚠️️ 5 minute tak koi activity na hone ke karan aapko auto-logout kar diya gaya hai.");
+                alert("⚠ 5 minute tak koi activity na hone ke karan aapko auto-logout kar diya gaya hai.");
                 performLogout();
             }, 300000);
         }
@@ -293,7 +293,7 @@
         let errorBox = document.getElementById('errorAlert');
 
         if (!isOccupied && action === 'checkout') {
-            errorBox.innerText = "⚠️ ERROR: YEH ROOM PEHLE SE HI KHALI HAI! AAP ISKA CHECK-OUT NAHI KAR SAKTE.";
+            errorBox.innerText = "⚠️️ ERROR: YEH ROOM PEHLE SE HI KHALI HAI! AAP ISKA CHECK-OUT NAHI KAR SAKTE.";
             errorBox.style.display = 'block';
             return;
         }
@@ -346,10 +346,10 @@
         document.getElementById('formFieldsContainer').innerHTML = `
             <div class="form-group"><label>DATE (DATE1)</label><input type="date" id="date1" required></div>
             <div class="form-group"><label>TRAIN NO.</label><input type="text" id="trainNo" required></div>
-            <div class="form-group"><label>LP NAME</label><input type="text" id="lpName" required></div>
-            <div class="form-group"><label>LP HQ</label><select id="lpHq" required>${hqOptionsHTML}</select></div>
-            <div class="form-group"><label>ALP NAME</label><input type="text" id="alpName" required></div>
-            <div class="form-group"><label>ALP HQ</label><select id="alpHq" required>${hqOptionsHTML}</select></div>
+            <div class="form-group"><label>LP NAME</label><input type="text" id="lpName"></div>
+            <div class="form-group"><label>LP HQ</label><select id="lpHq">${hqOptionsHTML}</select></div>
+            <div class="form-group"><label>ALP NAME</label><input type="text" id="alpName"></div>
+            <div class="form-group"><label>ALP HQ</label><select id="alpHq">${hqOptionsHTML}</select></div>
             <div class="form-group"><label>SIGN OFF TIME</label><input type="time" id="signOffTime" required></div>
         `;
     }
@@ -359,8 +359,8 @@
         document.getElementById('formFieldsContainer').innerHTML = `
             <div class="form-group"><label>DATE (DATE1)</label><input type="date" id="date1" required></div>
             <div class="form-group"><label>TRAIN NO.</label><input type="text" id="trainNo" required></div>
-            <div class="form-group"><label>TM NAME</label><input type="text" id="tmName" required></div>
-            <div class="form-group"><label>TM HQ</label><select id="tmHq" required>${hqOptionsHTML}</select></div>
+            <div class="form-group"><label>TM NAME</label><input type="text" id="tmName"></div>
+            <div class="form-group"><label>TM HQ</label><select id="tmHq">${hqOptionsHTML}</select></div>
             <div class="form-group"><label>SIGN OFF TIME</label><input type="time" id="signOffTime" required></div>
         `;
     }
@@ -370,12 +370,12 @@
         document.getElementById('formFieldsContainer').innerHTML = `
             <div class="form-group"><label>DATE (DATE1)</label><input type="date" id="date1" required></div>
             <div class="form-group"><label>TRAIN NO.</label><input type="text" id="trainNo" required></div>
-            <div class="form-group"><label>LP NAME</label><input type="text" id="lpName" required></div>
-            <div class="form-group"><label>LP HQ</label><select id="lpHq" required>${hqOptionsHTML}</select></div>
-            <div class="form-group"><label>ALP NAME</label><input type="text" id="alpName" required></div>
-            <div class="form-group"><label>ALP HQ</label><select id="alpHq" required>${hqOptionsHTML}</select></div>
-            <div class="form-group"><label>TM NAME</label><input type="text" id="tmName" required></div>
-            <div class="form-group"><label>TM HQ</label><select id="tmHq" required>${hqOptionsHTML}</select></div>
+            <div class="form-group"><label>LP NAME</label><input type="text" id="lpName"></div>
+            <div class="form-group"><label>LP HQ</label><select id="lpHq">${hqOptionsHTML}</select></div>
+            <div class="form-group"><label>ALP NAME</label><input type="text" id="alpName"></div>
+            <div class="form-group"><label>ALP HQ</label><select id="alpHq">${hqOptionsHTML}</select></div>
+            <div class="form-group"><label>TM NAME</label><input type="text" id="tmName"></div>
+            <div class="form-group"><label>TM HQ</label><select id="tmHq">${hqOptionsHTML}</select></div>
             <div class="form-group"><label>SIGN OFF TIME</label><input type="time" id="signOffTime" required></div>
         `;
     }
@@ -429,5 +429,4 @@
 </script>
 
 </body>
-
 </html>
