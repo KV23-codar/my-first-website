@@ -1,8 +1,10 @@
+// ==================== GOOGLE APPS SCRIPT (Code.gs) ====================
+
 function doGet(e) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Table1");
   if(!sheet) sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   
-  var data = sheet.getRange("A1:O33").getValues();
+  var data = sheet.getRange("A1:P33").getValues();
   return ContentService.createTextOutput(JSON.stringify(data))
          .setMimeType(ContentService.MimeType.JSON);
 }
@@ -14,8 +16,9 @@ function doPost(e) {
   var data = JSON.parse(e.postData.contents);
   var action = data.action; 
   var roomNo = String(data.roomNo).trim();
+  var userId = data.userId || ""; // Frontend से भेजी गई Login User ID
   
-  var rows = sheet.getRange("A1:O33").getValues();
+  var rows = sheet.getRange("A1:P33").getValues();
   var targetRow = -1;
   
   for (var i = 1; i < rows.length; i++) {
@@ -26,7 +29,6 @@ function doPost(e) {
   }
   
   if (targetRow !== -1) {
-    // Agar action 'checkin' ya 'overwrite' hai toh data update/save kar do bina error ke
     if (action === 'checkin' || action === 'overwrite') {
       var checkInTime = new Date();
       sheet.getRange(targetRow, 1).setValue(checkInTime); 
@@ -39,26 +41,28 @@ function doPost(e) {
       sheet.getRange(targetRow, 9).setValue(data.tmName || "");
       sheet.getRange(targetRow, 10).setValue(data.tmHq || "");
       sheet.getRange(targetRow, 11).setValue(data.signOffTime || "");
+      sheet.getRange(targetRow, 16).setValue(userId); // P Column (16th Column) में User ID save होगी
     } 
     else if (action === 'checkout') {
       var checkOutTime = new Date();
       sheet.getRange(targetRow, 12).setValue(data.date2 || "");     
       sheet.getRange(targetRow, 13).setValue(data.toTime || "");    
       sheet.getRange(targetRow, 14).setValue(data.signOnTime || "");
-      sheet.getRange(targetRow, 15).setValue(checkOutTime);         
+      sheet.getRange(targetRow, 15).setValue(checkOutTime || "");
+      sheet.getRange(targetRow, 16).setValue(userId); // Checkout ke samay bhi P Column me User ID save hogi        
       
-      var completedRowData = sheet.getRange(targetRow, 1, 1, 15).getValues();
+      var completedRowData = sheet.getRange(targetRow, 1, 1, 16).getValues();
       
       var existingRow41 = sheet.getRange(41, 1).getValue();
       if (existingRow41 !== "" && existingRow41 !== null) {
         var lastRow = sheet.getLastRow();
         if (lastRow >= 41) {
-          var rangeToMove = sheet.getRange(41, 1, lastRow - 40 + 1, 15);
+          var rangeToMove = sheet.getRange(41, 1, lastRow - 40 + 1, 16);
           rangeToMove.copyTo(sheet.getRange(42, 1));
         }
       }
       
-      sheet.getRange(41, 1, 1, 15).setValues(completedRowData);
+      sheet.getRange(41, 1, 1, 16).setValues(completedRowData);
       
       sheet.getRange(targetRow, 1).setValue(""); 
       sheet.getRange(targetRow, 3, 1, 13).clearContent(); 
