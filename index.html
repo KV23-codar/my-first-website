@@ -27,7 +27,7 @@
             grid-area: part1; background: rgb(103, 159, 255);
             display: flex; align-items: center; justify-content: center;
             position: relative; height: 200px; width: 100%;
-            padding: 0 280px; /* Logo ke liye space aur badha diya gaya hai */
+            padding: 0 280px;
         }
         .part-2 { grid-area: part2; background: rgb(128, 194, 255); padding: 15px; overflow-y: auto; }
         .part-3 { grid-area: part3; background: rgb(152, 229, 255); padding: 15px; overflow-y: auto; }
@@ -40,7 +40,6 @@
         }
         .switch-btn.active { background-color: #ff9800; border-color: #b36b00; }
         
-        /* Dono logo ko aur andar ki taraf khiska diya gaya hai */
         .left-logo { position: absolute; top: 35px; left: 150px; }
         .left-logo img { width: 95px; height: auto; display: block; }
         
@@ -59,6 +58,7 @@
             border: 1px solid rgba(0, 0, 0, 0.4); border-radius: 12px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7), 0 4px 8px rgba(0, 0, 0, 0.5);
             background: transparent;
+            cursor: pointer;
             transition: transform 0.1s ease;
         }
 
@@ -79,7 +79,7 @@
             width: 100%; height: 38px; border: 2px solid #5C2C14; border-radius: 6px;
             background-color: #A0522D; display: flex; align-items: center; justify-content: center;
             font-family: 'Cambria', Georgia, serif; font-size: 18px; font-weight: bold; 
-            color: blue !important; margin-bottom: 4px;
+            color: blue !important; margin-bottom: 4px; pointer-events: none;
         }
 
         #set-1 .sky-blue-box, #set-2 .sky-blue-box, #set-3 .sky-blue-box, #set-4 .sky-blue-box,
@@ -104,6 +104,7 @@
             width: 50%; height: 30px; border: 2px solid rgb(175, 163, 163); border-radius: 6px;
             display: flex; align-items: center; justify-content: center; color: white;
             font-family: 'Cambria', Georgia, serif; font-size: 14px; font-weight: bold;
+            pointer-events: none;
         }
         .sub-boxes-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 100%; }
         .sub-boxes-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%; }
@@ -111,6 +112,7 @@
             height: 30px; border: 2px solid rgb(175, 163, 163); display: flex; align-items: center;
             justify-content: center; color: #ffffff; font-family: 'Cambria', Georgia, serif;
             font-size: 13px; font-weight: bold; border-radius: 6px;
+            pointer-events: none;
         }
         .custom-table { width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 4px; font-family: 'Cambria', Georgia, serif; font-size: 13px; text-align: center; }
         .table-second { margin-top: 15px; }
@@ -125,43 +127,83 @@
         .has-value { background-color: #dc3545 !important; color: #ffffff !important; border-color: #a71d2a !important; }
         .is-empty { background-color: #28a745 !important; color: #ffffff !important; border-color: #1e7e34 !important; }
 
-        /* ================= MOBILE RESPONSIVE MEDIA QUERY ================= */
+        /* --- POPUP MODAL STYLES --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.7); display: none; align-items: center; justify-content: center; z-index: 9999;
+        }
+        .modal-content {
+            background: #ffffff; padding: 25px; border-radius: 12px; width: 450px; max-width: 90%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5); font-family: 'Cambria', Georgia, serif; position: relative;
+        }
+        .modal-content h3 { margin-top: 0; color: #1f51ff; border-bottom: 2px solid #ddd; padding-bottom: 8px; text-align: center; }
+        .modal-info-item { margin: 12px 0; font-size: 15px; color: #333; display: flex; justify-content: space-between; }
+        .modal-info-item span { font-weight: bold; color: #000; text-align: right; }
+        .close-btn {
+            background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 6px;
+            cursor: pointer; width: 100%; font-weight: bold; font-size: 15px; margin-top: 15px;
+        }
+        .close-btn:hover { background: #a71d2a; }
+
+        /* --- OCCUPIED ROOM / BED CARDS --- */
+        .occupied-rooms-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            max-height: 65vh;
+            overflow-y: auto;
+            padding: 4px;
+        }
+        .occupied-room-card {
+            background: linear-gradient(135deg, #fff7e6, #ffffff);
+            border: 2px solid #ff9800;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+        }
+        .occupied-room-card .bed-title {
+            background: #1f51ff;
+            color: #fff;
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+            padding: 6px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        .room-detail-row {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 6px;
+            padding: 4px 0;
+            border-bottom: 1px dashed #ccc;
+            font-size: 13px;
+        }
+        .room-detail-row:last-child { border-bottom: none; }
+        .room-detail-label { font-weight: bold; color: #444; }
+        .room-detail-value { font-weight: bold; color: #111; text-align: right; word-break: break-word; }
+
         @media screen and (max-width: 1024px) {
             .layout-container {
                 grid-template-rows: auto auto auto;
                 grid-template-columns: 100%;
-                grid-template-areas: 
-                    "part1"
-                    "part2"
-                    "part3";
-                height: auto;
-                overflow-y: auto;
+                grid-template-areas: "part1" "part2" "part3";
+                height: auto; overflow-y: auto;
             }
-            .part-1 {
-                height: auto;
-                padding: 20px 10px;
-                flex-direction: column;
-            }
-            .left-logo, .right-logo {
-                position: static;
-                margin-bottom: 8px;
-            }
+            .part-1 { height: auto; padding: 20px 10px; flex-direction: column; }
+            .left-logo, .right-logo { position: static; margin-bottom: 8px; }
             .left-logo img { width: 70px; }
             .right-logo img { width: 110px; }
             .center-text-container { padding: 0; }
             .hindi-text { font-size: 18px; }
             .english-text { font-size: 13px; }
             .sub-header-text { font-size: 13px; }
-            
-            .boxes-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .boxes-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media screen and (max-width: 600px) {
-            .boxes-grid {
-                grid-template-columns: 1fr;
-            }
+            .boxes-grid { grid-template-columns: 1fr; }
+            .modal-content { width: 96%; padding: 15px; }
         }
     </style>
 </head>
@@ -205,8 +247,29 @@
 
             <div class="switch-container">
                 <a href="form.html" class="switch-btn active" id="1">BOOKING STATUS</a>
-                <button class="switch-btn">SWITCH 3</button>
+                <a href="overview.html" class="switch-btn">AT A GLANCE</a>
             </div>
+        </div>
+    </div>
+
+    <!-- POPUP MODAL HTML -->
+    <div class="modal-overlay" id="roomModal">
+        <div class="modal-content">
+            <h3 id="modalRoomTitle">ROOM DETAILS</h3>
+
+            <!-- Sector 1-16 (Old Single Room Popup Layout) -->
+            <div id="singleRoomDetails">
+                <div class="modal-info-item">Date: <span id="modalDate">-</span></div>
+                <div class="modal-info-item">Train No.: <span id="modalTrainNo">-</span></div>
+                <div class="modal-info-item">LP Name / HQ: <span id="modalLp">-</span></div>
+                <div class="modal-info-item">ALP Name / HQ: <span id="modalAlp">-</span></div>
+                <div class="modal-info-item">Sign Off Time: <span id="modalSignOff">-</span></div>
+            </div>
+
+            <!-- Sector 17-22 & Sector 20 (Multi-Bed Card Layout) -->
+            <div id="occupiedRoomsContainer" class="occupied-rooms-container" style="display:none;"></div>
+
+            <button class="close-btn" onclick="closeModal()">Close</button>
         </div>
     </div>
 
@@ -220,6 +283,53 @@
             21: "ROOM NO. - 12", 22: "ROOM NO. - M.1"
         };
 
+        let globalSheetData = null;
+
+        const mapping = {
+            1: { rowIndex: 1, fCol: 5, hCol: 7 }, 
+            2: { rowIndex: 2, fCol: 5, hCol: 7 }, 
+            3: { rowIndex: 3, fCol: 5, hCol: 7 }, 
+            4: { rowIndex: 4, fCol: 5, hCol: 7 }, 
+            5: { rowIndex: 5, fCol: 5, hCol: 7 }, 
+            6: { rowIndex: 6, fCol: 5, hCol: 7 }, 
+            7: { rowIndex: 7, fCol: 5, hCol: 7 }, 
+            8: { rowIndex: 8, fCol: 5, hCol: 7 },
+            9: { rowIndex: 22, fCol: 5, hCol: 7 },  
+            10: { rowIndex: 23, fCol: 5, hCol: 7 }, 
+            11: { rowIndex: 24, fCol: 5, hCol: 7 }, 
+            12: { rowIndex: 25, fCol: 5, hCol: 7 }, 
+            13: { rowIndex: 26, fCol: 5, hCol: 7 }, 
+            14: { rowIndex: 27, fCol: 5, hCol: 7 }, 
+            15: { rowIndex: 31, fCol: 5, hCol: 7 },
+            16: { rowIndex: 32, fCol: 5, hCol: 7 },
+            17: { rows: [9, 10, 11, 12], col: 9 },
+            18: { rows: [13, 14, 15, 16], col: 9 },
+            19: { rows: [17, 18, 19, 20], col: 9 },
+            20: {
+                pairs: [
+                    { r1: 28, c1: 5, r2: 28, c2: 7 }, 
+                    { r1: 29, c1: 5, r2: 29, c2: 7 }  
+                ],
+                cells: [
+                    { r: 28, c: 5 }, { r: 28, c: 7 }, 
+                    { r: 29, c: 5 }, { r: 29, c: 7 }
+                ]
+            },
+            // सेक्टर 21 और 22 के लिए रो (Row) मैपिंग
+            21: {
+                rowIndex: 21,
+                cells: [
+                    { r: 21, c: 5 }, { r: 21, c: 7 }, { r: 21, c: 9 }
+                ]
+            },
+            22: {
+                rowIndex: 30,
+                cells: [
+                    { r: 30, c: 5 }, { r: 30, c: 7 }, { r: 30, c: 9 }
+                ]
+            }
+        };
+
         function generate22Sets() {
             const gridContainer = document.querySelector('.boxes-grid');
             gridContainer.innerHTML = '';
@@ -227,17 +337,284 @@
                 let cardHTML = '';
                 const roomTitle = roomNames[i] || '';
 
+                // सेक्टर 1 से 22 तक सभी पर क्लिक चालू किया गया है (ताकि 21 और 22 भी क्लिक पर पॉप-अप दिखाएं)
+                let clickAttr = (i <= 22) ? `onclick="openRoomDetails(${i})"` : `style="cursor: default;"`;
+
                 if (i >= 17 && i <= 20) {
-                    cardHTML = `<div class="box-card" id="set-${i}"><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes-4"><div class="mini-box box-1">-</div><div class="mini-box box-2">-</div><div class="mini-box box-3">-</div><div class="mini-box box-4">-</div></div></div>`;
+                    cardHTML = `<div class="box-card" id="set-${i}" ${clickAttr}><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes-4"><div class="mini-box box-1">-</div><div class="mini-box box-2">-</div><div class="mini-box box-3">-</div><div class="mini-box box-4">-</div></div></div>`;
                 } else if (i === 21 || i === 22) {
-                    cardHTML = `<div class="box-card" id="set-${i}"><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes-3"><div class="mini-box box-1">-</div><div class="mini-box box-2">-</div><div class="mini-box box-3">-</div></div></div>`;
+                    cardHTML = `<div class="box-card" id="set-${i}" ${clickAttr}><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes-3"><div class="mini-box box-1">-</div><div class="mini-box box-2">-</div><div class="mini-box box-3">-</div></div></div>`;
                 } else if (i >= 9 && i <= 16) {
-                    cardHTML = `<div class="box-card" id="set-${i}"><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes-4" style="grid-template-columns: 1fr 1fr;"><div class="mini-box box-1">-</div><div class="mini-box box-2">-</div></div></div>`;
+                    cardHTML = `<div class="box-card" id="set-${i}" ${clickAttr}><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes-4" style="grid-template-columns: 1fr 1fr;"><div class="mini-box box-1">-</div><div class="mini-box box-2">-</div></div></div>`;
                 } else {
-                    cardHTML = `<div class="box-card" id="set-${i}"><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes"><div class="sky-blue-box-21 box-1">-</div><div class="sky-blue-box-3 box-2">-</div></div></div>`;
+                    cardHTML = `<div class="box-card" id="set-${i}" ${clickAttr}><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes"><div class="sky-blue-box-21 box-1">-</div><div class="sky-blue-box-3 box-2">-</div></div></div>`;
                 }
                 gridContainer.insertAdjacentHTML('beforeend', cardHTML);
             }
+        }
+
+        function openRoomDetails(secId) {
+            if (!globalSheetData) {
+                alert('Google Sheet का data अभी load नहीं हुआ है। कृपया कुछ सेकंड बाद फिर क्लिक करें।');
+                return;
+            }
+
+            const singleDetails = document.getElementById('singleRoomDetails');
+            const occupiedContainer = document.getElementById('occupiedRoomsContainer');
+            const modalTitle = document.getElementById('modalRoomTitle');
+
+            // --- सेक्टर 21 और 22 के लिए विशेष सिंगल कार्ड लेआउट (3-3 रूम्स एक साथ) ---
+            if (secId === 21 || secId === 22) {
+                modalTitle.innerText = `SECTOR ${secId} - ROOMS DETAILS`;
+                singleDetails.style.display = 'none';
+                occupiedContainer.style.display = 'grid';
+                occupiedContainer.innerHTML = '';
+
+                let rowIndex = mapping[secId].rowIndex;
+                let rowData = globalSheetData[rowIndex] || [];
+
+                // आपके बताए गए कॉलम के अनुसार डेटा फेच किया जा रहा है:
+                // Date (Col C / Index 2), Train No (Col D / Index 3)
+                // LP Name (Col E / Index 4), LP HQ (Col F / Index 5)
+                // ALP Name (Col G / Index 6), ALP HQ (Col H / Index 7)
+                // TM Name (Col I / Index 8), TM HQ (Col J / Index 9)
+                // Sign Off (Col AF / Index 31)
+
+                let dateVal = rowData[2];
+                let trainNoVal = rowData[3];
+                let lpName = rowData[4];
+                let lpHq = rowData[5];
+                let alpName = rowData[6];
+                let alpHq = rowData[7];
+                let tmName = rowData[8];
+                let tmHq = rowData[9];
+                let signOff = rowData[31];
+
+                let formattedDate = (dateVal !== undefined && dateVal !== '') ? formatDate(dateVal) : '-';
+                let trainVal = (trainNoVal !== undefined && trainNoVal !== '') ? trainNoVal : '-';
+                let lpVal = ((lpName !== undefined && lpName !== '') ? lpName : '-') + ' / ' + ((lpHq !== undefined && lpHq !== '') ? lpHq : '-');
+                let alpVal = ((alpName !== undefined && alpName !== '') ? alpName : '-') + ' / ' + ((alpHq !== undefined && alpHq !== '') ? alpHq : '-');
+                let tmVal = ((tmName !== undefined && tmName !== '') ? tmName : '-') + ' / ' + ((tmHq !== undefined && tmHq !== '') ? tmHq : '-');
+                let formattedSignOff = (signOff !== undefined && signOff !== '') ? formatTimeToHHMM(signOff) : '-';
+
+                const card = document.createElement('div');
+                card.className = 'occupied-room-card';
+                card.innerHTML = `
+                    <div class="bed-title">SECTOR ${secId} COMBINED DETAILS</div>
+                    <div class="room-detail-row">
+                        <div class="room-detail-label">1. DATE</div>
+                        <div class="room-detail-value">${escapeHtml(formattedDate)}</div>
+                    </div>
+                    <div class="room-detail-row">
+                        <div class="room-detail-label">2. TRAIN NO.</div>
+                        <div class="room-detail-value">${escapeHtml(trainVal)}</div>
+                    </div>
+                    <div class="room-detail-row">
+                        <div class="room-detail-label">3. LP NAME / HQ</div>
+                        <div class="room-detail-value">${escapeHtml(lpVal)}</div>
+                    </div>
+                    <div class="room-detail-row">
+                        <div class="room-detail-label">4. ALP NAME / HQ</div>
+                        <div class="room-detail-value">${escapeHtml(alpVal)}</div>
+                    </div>
+                    <div class="room-detail-row">
+                        <div class="room-detail-label">5. TM NAME / HQ</div>
+                        <div class="room-detail-value">${escapeHtml(tmVal)}</div>
+                    </div>
+                    <div class="room-detail-row">
+                        <div class="room-detail-label">6. SIGN OFF TIME</div>
+                        <div class="room-detail-value">${escapeHtml(formattedSignOff)}</div>
+                    </div>
+                `;
+                occupiedContainer.appendChild(card);
+
+                document.getElementById('roomModal').style.display = 'flex';
+                return;
+            }
+
+            // --- Sector 20 के लिए विशेष Multi-Card Layout ---
+            if (secId === 20) {
+                modalTitle.innerText = `SECTOR 20 - ROOMS OCCUPANCY`;
+                singleDetails.style.display = 'none';
+                occupiedContainer.style.display = 'grid';
+                occupiedContainer.innerHTML = '';
+
+                let cardNames = ["19 A", "19 B"];
+                let pairs = mapping[20].pairs;
+
+                pairs.forEach((pair, index) => {
+                    let rowData = globalSheetData[pair.r1] || [];
+
+                    let dateVal = rowData[2];
+                    let trainNoVal = rowData[3];
+                    let lpName = rowData[4];
+                    let lpHq = rowData[5];
+                    let alpName = rowData[6];
+                    let alpHq = rowData[7];
+                    let signOff = rowData[31];
+
+                    let lpVal = ((lpName !== undefined && lpName !== '') ? lpName : '-') + ' / ' + ((lpHq !== undefined && lpHq !== '') ? lpHq : '-');
+                    let alpVal = ((alpName !== undefined && alpName !== '') ? alpName : '-') + ' / ' + ((alpHq !== undefined && alpHq !== '') ? alpHq : '-');
+                    let trainVal = (trainNoVal !== undefined && trainNoVal !== '') ? trainNoVal : '-';
+                    let formattedDate = (dateVal !== undefined && dateVal !== '') ? formatDate(dateVal) : '-';
+                    let formattedSignOff = (signOff !== undefined && signOff !== '') ? formatTimeToHHMM(signOff) : '-';
+
+                    const card = document.createElement('div');
+                    card.className = 'occupied-room-card';
+                    card.innerHTML = `
+                        <div class="bed-title">${cardNames[index]}</div>
+                        <div class="room-detail-row">
+                            <div class="room-detail-label">1. DATE</div>
+                            <div class="room-detail-value">${escapeHtml(formattedDate)}</div>
+                        </div>
+                        <div class="room-detail-row">
+                            <div class="room-detail-label">2. TRAIN NO.</div>
+                            <div class="room-detail-value">${escapeHtml(trainVal)}</div>
+                        </div>
+                        <div class="room-detail-row">
+                            <div class="room-detail-label">3. LP NAME / HQ</div>
+                            <div class="room-detail-value">${escapeHtml(lpVal)}</div>
+                        </div>
+                        <div class="room-detail-row">
+                            <div class="room-detail-label">4. ALP NAME / HQ</div>
+                            <div class="room-detail-value">${escapeHtml(alpVal)}</div>
+                        </div>
+                        <div class="room-detail-row">
+                            <div class="room-detail-label">5. SIGN OFF TIME</div>
+                            <div class="room-detail-value">${escapeHtml(formattedSignOff)}</div>
+                        </div>
+                    `;
+                    occupiedContainer.appendChild(card);
+                });
+
+                document.getElementById('roomModal').style.display = 'flex';
+                return;
+            }
+
+            // --- Sector 17, 18, 19 के लिए Multi-Bed Cards ---
+            if (secId >= 17 && secId <= 19) {
+                const sectorRows = mapping[secId] && mapping[secId].rows ? mapping[secId].rows : [];
+                const baseRoomNo = secId === 17 ? 9 : (secId === 18 ? 10 : 11);
+
+                modalTitle.innerText = `SECTOR ${secId} - ROOMS OCCUPANCY`;
+                singleDetails.style.display = 'none';
+                occupiedContainer.style.display = 'grid';
+                occupiedContainer.innerHTML = '';
+
+                sectorRows.forEach((rowIndex, index) => {
+                    const rowData = globalSheetData[rowIndex] || [];
+                    const dateVal = rowData[2];
+                    const trainNoVal = rowData[3];
+                    const tmName = rowData[8];
+                    const tmHq = rowData[9];
+                    const signOff = rowData[31];
+
+                    const roomName = `ROOM ${baseRoomNo}${String.fromCharCode(65 + index)}`;
+                    const tmNameVal = (tmName !== undefined && tmName !== null && String(tmName).trim() !== '') ? tmName : '-';
+                    const tmHqVal = (tmHq !== undefined && tmHq !== null && String(tmHq).trim() !== '') ? tmHq : '-';
+                    const trainVal = (trainNoVal !== undefined && trainNoVal !== null && String(trainNoVal).trim() !== '') ? trainNoVal : '-';
+                    const formattedDate = (dateVal !== undefined && dateVal !== '') ? formatDate(dateVal) : '-';
+                    const formattedSignOff = (signOff !== undefined && signOff !== '') ? formatTimeToHHMM(signOff) : '-';
+
+                    const card = document.createElement('div');
+                    card.className = 'occupied-room-card';
+                    card.innerHTML = `
+                        <div class="bed-title">${roomName}</div>
+                        <div class="room-detail-row">
+                            <div class="room-detail-label">1. DATE</div>
+                            <div class="room-detail-value">${escapeHtml(formattedDate)}</div>
+                        </div>
+                        <div class="room-detail-row">
+                            <div class="room-detail-label">2. TRAIN NO.</div>
+                            <div class="room-detail-value">${escapeHtml(trainVal)}</div>
+                        </div>
+                        <div class="room-detail-row">
+                            <div class="room-detail-label">3. TM NAME / HQ</div>
+                            <div class="room-detail-value">${escapeHtml(tmNameVal)} / ${escapeHtml(tmHqVal)}</div>
+                        </div>
+                        <div class="room-detail-row">
+                            <div class="room-detail-label">4. SIGN OFF TIME</div>
+                            <div class="room-detail-value">${escapeHtml(formattedSignOff)}</div>
+                        </div>
+                    `;
+                    occupiedContainer.appendChild(card);
+                });
+
+                document.getElementById('roomModal').style.display = 'flex';
+                return;
+            }
+
+            // --- Sector 1 से 16 के लिए सामान्य Single-Room Popup ---
+            modalTitle.innerText = roomNames[secId] || `ROOM - ${secId}`;
+            singleDetails.style.display = 'block';
+            occupiedContainer.style.display = 'none';
+            occupiedContainer.innerHTML = '';
+
+            let dateVal = '-';
+            let trainNoVal = '-';
+            let lpVal = '-';
+            let alpVal = '-';
+            let signOffVal = '-';
+
+            let map = mapping[secId];
+            if (map && globalSheetData && globalSheetData[map.rowIndex]) {
+                let rowData = globalSheetData[map.rowIndex];
+                
+                let rawDate     = rowData[2]; 
+                let rawTrainNo  = rowData[3];
+                let rawLpName   = rowData[4];  
+                let rawLpHq     = rowData[5];     
+                let rawAlpName  = rowData[6];  
+                let rawAlpHq    = rowData[7];    
+                let rawSignOff  = rowData[31]; 
+
+                dateVal = (rawDate !== undefined && rawDate !== "") ? rawDate : '-';
+                trainNoVal = (rawTrainNo !== undefined && rawTrainNo !== "") ? rawTrainNo : '-';
+                
+                let lpPart = (rawLpName !== undefined && rawLpName !== "") ? rawLpName : '-';
+                let lpHqPart = (rawLpHq !== undefined && rawLpHq !== "") ? rawLpHq : '';
+                lpVal = lpHqPart ? `${lpPart} / ${lpHqPart}` : lpPart;
+
+                let alpPart = (rawAlpName !== undefined && rawAlpName !== "") ? rawAlpName : '-';
+                let alpHqPart = (rawAlpHq !== undefined && rawAlpHq !== "") ? rawAlpHq : '';
+                alpVal = alpHqPart ? `${alpPart} / ${alpHqPart}` : alpPart;
+
+                signOffVal = (rawSignOff !== undefined && rawSignOff !== "") ? rawSignOff : '-';
+            }
+
+            document.getElementById('modalDate').innerText = formatDate(dateVal);
+            document.getElementById('modalTrainNo').innerText = trainNoVal;
+            document.getElementById('modalLp').innerText = lpVal;
+            document.getElementById('modalAlp').innerText = alpVal;
+            document.getElementById('modalSignOff').innerText = formatTimeToHHMM(signOffVal);
+
+            document.getElementById('roomModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('roomModal').style.display = 'none';
+        }
+
+        function escapeHtml(value) {
+            if (value === undefined || value === null) return '-';
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function formatDate(val) {
+            if (!val || val === '-') return '-';
+            if (typeof val === 'string' && val.includes('T')) {
+                let datePart = val.split('T')[0];
+                let parts = datePart.split('-');
+                if (parts.length === 3) {
+                    return parts[2] + '-' + parts[1] + '-' + parts[0];
+                }
+            }
+            return val;
         }
 
         function formatTimeToHHMM(val) {
@@ -270,44 +647,7 @@
 
         window.handleSheetData = function(data) {
             if (!data || !Array.isArray(data)) return;
-
-            const mapping = {
-                1: { rowIndex: 1, fCol: 5, hCol: 7 }, 
-                2: { rowIndex: 2, fCol: 5, hCol: 7 }, 
-                3: { rowIndex: 3, fCol: 5, hCol: 7 }, 
-                4: { rowIndex: 4, fCol: 5, hCol: 7 }, 
-                5: { rowIndex: 5, fCol: 5, hCol: 7 }, 
-                6: { rowIndex: 6, fCol: 5, hCol: 7 }, 
-                7: { rowIndex: 7, fCol: 5, hCol: 7 }, 
-                8: { rowIndex: 8, fCol: 5, hCol: 7 },
-                9: { rowIndex: 22, fCol: 5, hCol: 7 },  
-                10: { rowIndex: 23, fCol: 5, hCol: 7 }, 
-                11: { rowIndex: 24, fCol: 5, hCol: 7 }, 
-                12: { rowIndex: 25, fCol: 5, hCol: 7 }, 
-                13: { rowIndex: 26, fCol: 5, hCol: 7 }, 
-                14: { rowIndex: 27, fCol: 5, hCol: 7 }, 
-                15: { rowIndex: 31, fCol: 5, hCol: 7 },
-                16: { rowIndex: 32, fCol: 5, hCol: 7 },
-                17: { rows: [9, 10, 11, 12], col: 9 },
-                18: { rows: [13, 14, 15, 16], col: 9 },
-                19: { rows: [17, 18, 19, 20], col: 9 },
-                20: {
-                    cells: [
-                        { r: 28, c: 5 }, { r: 28, c: 7 }, 
-                        { r: 29, c: 5 }, { r: 29, c: 7 }
-                    ]
-                },
-                21: {
-                    cells: [
-                        { r: 21, c: 5 }, { r: 21, c: 7 }, { r: 21, c: 9 }
-                    ]
-                },
-                22: {
-                    cells: [
-                        { r: 30, c: 5 }, { r: 30, c: 7 }, { r: 30, c: 9 }
-                    ]
-                }
-            };
+            globalSheetData = data;
 
             for (let secId in mapping) {
                 let map = mapping[secId];
