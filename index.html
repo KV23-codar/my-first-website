@@ -315,7 +315,6 @@
                     { r: 29, c: 5 }, { r: 29, c: 7 }
                 ]
             },
-            // सेक्टर 21 और 22 के लिए रो (Row) मैपिंग
             21: {
                 rowIndex: 21,
                 cells: [
@@ -337,7 +336,6 @@
                 let cardHTML = '';
                 const roomTitle = roomNames[i] || '';
 
-                // सेक्टर 1 से 22 तक सभी पर क्लिक चालू किया गया है (ताकि 21 और 22 भी क्लिक पर पॉप-अप दिखाएं)
                 let clickAttr = (i <= 22) ? `onclick="openRoomDetails(${i})"` : `style="cursor: default;"`;
 
                 if (i >= 17 && i <= 20) {
@@ -363,7 +361,6 @@
             const occupiedContainer = document.getElementById('occupiedRoomsContainer');
             const modalTitle = document.getElementById('modalRoomTitle');
 
-            // --- सेक्टर 21 और 22 के लिए विशेष सिंगल कार्ड लेआउट (3-3 रूम्स एक साथ) ---
             if (secId === 21 || secId === 22) {
                 modalTitle.innerText = `SECTOR ${secId} - ROOMS DETAILS`;
                 singleDetails.style.display = 'none';
@@ -372,13 +369,6 @@
 
                 let rowIndex = mapping[secId].rowIndex;
                 let rowData = globalSheetData[rowIndex] || [];
-
-                // आपके बताए गए कॉलम के अनुसार डेटा फेच किया जा रहा है:
-                // Date (Col C / Index 2), Train No (Col D / Index 3)
-                // LP Name (Col E / Index 4), LP HQ (Col F / Index 5)
-                // ALP Name (Col G / Index 6), ALP HQ (Col H / Index 7)
-                // TM Name (Col I / Index 8), TM HQ (Col J / Index 9)
-                // Sign Off (Col AF / Index 31)
 
                 let dateVal = rowData[2];
                 let trainNoVal = rowData[3];
@@ -432,7 +422,6 @@
                 return;
             }
 
-            // --- Sector 20 के लिए विशेष Multi-Card Layout ---
             if (secId === 20) {
                 modalTitle.innerText = `SECTOR 20 - ROOMS OCCUPANCY`;
                 singleDetails.style.display = 'none';
@@ -491,7 +480,6 @@
                 return;
             }
 
-            // --- Sector 17, 18, 19 के लिए Multi-Bed Cards ---
             if (secId >= 17 && secId <= 19) {
                 const sectorRows = mapping[secId] && mapping[secId].rows ? mapping[secId].rows : [];
                 const baseRoomNo = secId === 17 ? 9 : (secId === 18 ? 10 : 11);
@@ -544,7 +532,6 @@
                 return;
             }
 
-            // --- Sector 1 से 16 के लिए सामान्य Single-Room Popup ---
             modalTitle.innerText = roomNames[secId] || `ROOM - ${secId}`;
             singleDetails.style.display = 'block';
             occupiedContainer.style.display = 'none';
@@ -605,13 +592,31 @@
                 .replace(/'/g, '&#039;');
         }
 
+        // Updated formatDate function with +1 day (24 hours) correction for UTC offset
         function formatDate(val) {
             if (!val || val === '-') return '-';
+            
+            let d = new Date(val);
+            if (!isNaN(d.getTime())) {
+                d.setUTCDate(d.getUTCDate() + 1);
+                let day = String(d.getUTCDate()).padStart(2, '0');
+                let month = String(d.getUTCMonth() + 1).padStart(2, '0');
+                let year = d.getUTCFullYear();
+                return `${day}-${month}-${year}`;
+            }
+            
             if (typeof val === 'string' && val.includes('T')) {
                 let datePart = val.split('T')[0];
                 let parts = datePart.split('-');
                 if (parts.length === 3) {
-                    return parts[2] + '-' + parts[1] + '-' + parts[0];
+                    let dObj = new Date(datePart);
+                    if (!isNaN(dObj.getTime())) {
+                        dObj.setUTCDate(dObj.getUTCDate() + 1);
+                        let day = String(dObj.getUTCDate()).padStart(2, '0');
+                        let month = String(dObj.getUTCMonth() + 1).padStart(2, '0');
+                        let year = dObj.getUTCFullYear();
+                        return `${day}-${month}-${year}`;
+                    }
                 }
             }
             return val;
