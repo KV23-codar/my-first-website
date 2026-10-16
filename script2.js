@@ -5,6 +5,16 @@ function doGet(e) {
   if(!sheet) sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   
   var data = sheet.getRange("A1:P33").getValues();
+  
+  var tz = Session.getScriptTimeZone();
+  
+  // शीट से आने वाली तारीख को सही स्ट्रिंग फॉर्मेट में बदलना ताकि 1 दिन पीछे या आगे की समस्या न हो
+  for(var i = 1; i < data.length; i++) {
+    if(data[i][2] instanceof Date) {
+      data[i][2] = Utilities.formatDate(data[i][2], tz, "yyyy-MM-dd");
+    }
+  }
+  
   return ContentService.createTextOutput(JSON.stringify(data))
          .setMimeType(ContentService.MimeType.JSON);
 }
@@ -16,7 +26,7 @@ function doPost(e) {
   var data = JSON.parse(e.postData.contents);
   var action = data.action; 
   var roomNo = String(data.roomNo).trim();
-  var userId = data.userId || ""; // Frontend से भेजी गई Login User ID
+  var userId = data.userId || ""; 
   
   var rows = sheet.getRange("A1:P33").getValues();
   var targetRow = -1;
@@ -41,7 +51,7 @@ function doPost(e) {
       sheet.getRange(targetRow, 9).setValue(data.tmName || "");
       sheet.getRange(targetRow, 10).setValue(data.tmHq || "");
       sheet.getRange(targetRow, 11).setValue(data.signOffTime || "");
-      sheet.getRange(targetRow, 16).setValue(userId); // P Column (16th Column) में User ID save होगी
+      sheet.getRange(targetRow, 16).setValue(userId); 
     } 
     else if (action === 'checkout') {
       var checkOutTime = new Date();
@@ -49,7 +59,7 @@ function doPost(e) {
       sheet.getRange(targetRow, 13).setValue(data.toTime || "");    
       sheet.getRange(targetRow, 14).setValue(data.signOnTime || "");
       sheet.getRange(targetRow, 15).setValue(checkOutTime || "");
-      sheet.getRange(targetRow, 16).setValue(userId); // Checkout ke samay bhi P Column me User ID save hogi        
+      sheet.getRange(targetRow, 16).setValue(userId);        
       
       var completedRowData = sheet.getRange(targetRow, 1, 1, 16).getValues();
       
