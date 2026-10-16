@@ -1,753 +1,342 @@
 <!DOCTYPE html>
 <html lang="hi">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page 2 - Indian Logo Page</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
-
+    <title>20-80 Layout with Tables</title>
     <style>
-        * { box-sizing: border-box; }
-        body { margin: 0; padding: 0; background-color: #111; }
-        
-        .layout-container {
-            display: grid;
-            width: 100vw;
-            min-height: 100vh;
-            grid-template-rows: 200px auto;
-            grid-template-columns: 60% 40%;
-            grid-template-areas: "part1 part1" "part2 part3";
-            background: rgb(128, 194, 255);
-        }
-        .part-1 {
-            grid-area: part1; background: rgb(103, 159, 255);
-            display: flex; align-items: center; justify-content: center;
-            position: relative; height: 200px; width: 100%;
-            padding: 0 280px;
-        }
-        .part-2 { grid-area: part2; background: rgb(128, 194, 255); padding: 15px; overflow-y: auto; }
-        .part-3 { grid-area: part3; background: rgb(152, 229, 255); padding: 15px; overflow-y: auto; }
-        
-        .switch-container { display: flex; justify-content: space-between; gap: 12px; margin-top: 15px; }
-        .switch-btn {
-            flex: 1; padding: 10px 5px; background-color: #1f51ff; color: #ffffff;
-            border: 2px solid #001f3f; border-radius: 10px; font-family: 'Cambria', Georgia, serif;
-            font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; display: block;
-        }
-        .switch-btn.active { background-color: #ff9800; border-color: #b36b00; }
-        
-        .left-logo { position: absolute; top: 35px; left: 150px; }
-        .left-logo img { width: 95px; height: auto; display: block; }
-        
-        .right-logo { position: absolute; top: 35px; right: 150px; }
-        .right-logo img { width: 150px; height: auto; display: block; }
-        
-        .center-text-container { text-align: center; color: #ffff00; font-weight: bold; width: 100%; }
-        .hindi-text { font-family: 'Aparajita', 'Tiro Devanagari Hindi', sans-serif; font-size: 30px; margin-bottom: 2px; }
-        .english-text { font-family: 'Cambria', Georgia, serif; font-size: 25px; margin-bottom: 8px; }
-        .sub-header-text { font-family: 'Cambria', Georgia, serif; font-size: 20px; color: #5C2C14; }
-        
-        .boxes-grid { display: grid; grid-template-columns: repeat(4, 1fr); row-gap: 20px; column-gap: 20px; width: 100%; }
-        
-        .box-card {
-            display: flex; flex-direction: column; align-items: center; width: 100%; padding: 6px;
-            border: 1px solid rgba(0, 0, 0, 0.4); border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7), 0 4px 8px rgba(0, 0, 0, 0.5);
-            background: transparent;
-            cursor: pointer;
-            transition: transform 0.1s ease;
-        }
-
-        .box-card:hover {
-            animation: shake 0.4s infinite;
-        }
-
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            20% { transform: translate(-1px, -2px) rotate(-1deg); }
-            40% { transform: translate(-3px, 0px) rotate(1deg); }
-            60% { transform: translate(3px, 2px) rotate(0deg); }
-            80% { transform: translate(1px, -1px) rotate(1deg); }
-            100% { transform: translate(-1px, 2px) rotate(-1deg); }
+        body, html { height: 100vh; margin: 0; display: flex; flex-direction: column; font-family: 'Cambria', serif; }
+        .top { 
+            height: 20vh; 
+            background: #f0f0f0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            border-bottom: 2px solid #ccc; 
+            position: relative; /* बटन को पोजीशन देने के लिए */
         }
         
-        .sky-blue-box {
-            width: 100%; height: 38px; border: 2px solid #5C2C14; border-radius: 6px;
-            background-color: #A0522D; display: flex; align-items: center; justify-content: center;
-            font-family: 'Cambria', Georgia, serif; font-size: 18px; font-weight: bold; 
-            color: blue !important; margin-bottom: 4px; pointer-events: none;
-        }
-
-        #set-1 .sky-blue-box, #set-2 .sky-blue-box, #set-3 .sky-blue-box, #set-4 .sky-blue-box,
-        #set-5 .sky-blue-box, #set-6 .sky-blue-box, #set-7 .sky-blue-box, #set-12 .sky-blue-box,
-        #set-13 .sky-blue-box, #set-14 .sky-blue-box, #set-15 .sky-blue-box, #set-16 .sky-blue-box,
-        #set-20 .sky-blue-box, #set-21 .sky-blue-box, #set-22 .sky-blue-box {
-            background-color: #D2B48C !important; color: blue !important; border-color: #8B4513 !important;
-        }
-
-        #set-8 .sky-blue-box { background-color: pink !important; color: blue !important; border-color: #c71585 !important; }
-
-        #set-9 .sky-blue-box, #set-10 .sky-blue-box, #set-11 .sky-blue-box, #set-12 .sky-blue-box {
-            background-color: #90ee90 !important; color: blue !important; border-color: #2e8b57 !important;
-        }
-        
-        #set-17 .sky-blue-box, #set-18 .sky-blue-box, #set-19 .sky-blue-box {
-            background-color: #e0f447 !important; color: blue !important; border-color: #2e8b57 !important;
-        }
-
-        .sub-boxes { display: flex; width: 100%; height: 30px; gap: 4px; }
-        .sky-blue-box-21, .sky-blue-box-3 {
-            width: 50%; height: 30px; border: 2px solid rgb(175, 163, 163); border-radius: 6px;
-            display: flex; align-items: center; justify-content: center; color: white;
-            font-family: 'Cambria', Georgia, serif; font-size: 14px; font-weight: bold;
-            pointer-events: none;
-        }
-        .sub-boxes-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 100%; }
-        .sub-boxes-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%; }
-        .mini-box {
-            height: 30px; border: 2px solid rgb(175, 163, 163); display: flex; align-items: center;
-            justify-content: center; color: #ffffff; font-family: 'Cambria', Georgia, serif;
-            font-size: 13px; font-weight: bold; border-radius: 6px;
-            pointer-events: none;
-        }
-        .custom-table { width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 4px; font-family: 'Cambria', Georgia, serif; font-size: 13px; text-align: center; }
-        .table-second { margin-top: 15px; }
-        .custom-table th, .custom-table td { border: 1px solid #999; border-radius: 8px; padding: 6px 2px; height: 32px; background-color: #ffffff; vertical-align: middle; }
-        .custom-table th { background-color: #1f51ff; color: #ffffff; border-color: #001f3f; }
-        
-        .staff-data-row td {
-            background-color: #ffffff; color: #000000; font-weight: bold; font-size: 14px;
-            border: 2px solid rgb(175, 163, 163);
-        }
-
-        .has-value { background-color: #dc3545 !important; color: #ffffff !important; border-color: #a71d2a !important; }
-        .is-empty { background-color: #28a745 !important; color: #ffffff !important; border-color: #1e7e34 !important; }
-
-        /* --- POPUP MODAL STYLES --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.7); display: none; align-items: center; justify-content: center; z-index: 9999;
-        }
-        .modal-content {
-            background: #ffffff; padding: 25px; border-radius: 12px; width: 450px; max-width: 90%;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5); font-family: 'Cambria', Georgia, serif; position: relative;
-        }
-        .modal-content h3 { margin-top: 0; color: #1f51ff; border-bottom: 2px solid #ddd; padding-bottom: 8px; text-align: center; }
-        .modal-info-item { margin: 12px 0; font-size: 15px; color: #333; display: flex; justify-content: space-between; }
-        .modal-info-item span { font-weight: bold; color: #000; text-align: right; }
-        .close-btn {
-            background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 6px;
-            cursor: pointer; width: 100%; font-weight: bold; font-size: 15px; margin-top: 15px;
-        }
-        .close-btn:hover { background: #a71d2a; }
-
-        /* --- OCCUPIED ROOM / BED CARDS --- */
-        .occupied-rooms-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            max-height: 65vh;
-            overflow-y: auto;
-            padding: 4px;
-        }
-        .occupied-room-card {
-            background: linear-gradient(135deg, #fff7e6, #ffffff);
-            border: 2px solid #ff9800;
-            border-radius: 12px;
-            padding: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.18);
-        }
-        .occupied-room-card .bed-title {
-            background: #1f51ff;
-            color: #fff;
-            font-size: 15px;
-            font-weight: bold;
-            text-align: center;
-            padding: 6px;
-            border-radius: 6px;
-            margin-bottom: 8px;
-        }
-        .room-detail-row {
-            display: grid;
-            grid-template-columns: 140px 1fr;
+        /* --- RIGHT CORNER BUTTONS CONTAINER --- */
+        .header-buttons {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
             gap: 6px;
-            padding: 4px 0;
-            border-bottom: 1px dashed #ccc;
+            z-index: 10;
+        }
+
+        /* --- PDF & BACK BUTTON STYLING --- */
+        .action-btn {
+            background-color: #dc3545;
+            color: #ffffff;
+            border: 2px solid #a71d2a;
+            border-radius: 6px;
+            padding: 6px 14px;
+            text-decoration: none;
             font-size: 13px;
-        }
-        .room-detail-row:last-child { border-bottom: none; }
-        .room-detail-label { font-weight: bold; color: #444; }
-        .room-detail-value { font-weight: bold; color: #111; text-align: right; word-break: break-word; }
-
-        @media screen and (max-width: 1024px) {
-            .layout-container {
-                grid-template-rows: auto auto auto;
-                grid-template-columns: 100%;
-                grid-template-areas: "part1" "part2" "part3";
-                height: auto; overflow-y: auto;
-            }
-            .part-1 { height: auto; padding: 20px 10px; flex-direction: column; }
-            .left-logo, .right-logo { position: static; margin-bottom: 8px; }
-            .left-logo img { width: 70px; }
-            .right-logo img { width: 110px; }
-            .center-text-container { padding: 0; }
-            .hindi-text { font-size: 18px; }
-            .english-text { font-size: 13px; }
-            .sub-header-text { font-size: 13px; }
-            .boxes-grid { grid-template-columns: repeat(2, 1fr); }
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            white-space: nowrap;
         }
 
-        @media screen and (max-width: 600px) {
-            .boxes-grid { grid-template-columns: 1fr; }
-            .modal-content { width: 96%; padding: 15px; }
+        .action-btn.pdf-btn {
+            background-color: #dc3545;
+            border-color: #a71d2a;
+        }
+        .action-btn.pdf-btn:hover {
+            background-color: #a71d2a;
+            transform: scale(1.05);
+        }
+
+        .action-btn.back-btn {
+            background-color: #1f51ff;
+            border-color: #001f3f;
+        }
+        .action-btn.back-btn:hover {
+            background-color: #0035bd;
+            transform: scale(1.05);
+        }
+
+        .bottom { height: 80vh; display: flex; gap: 20px; padding: 20px; box-sizing: border-box; }
+        .box { flex: 1; border: 1px solid #ccc; overflow-y: auto; padding: 10px; background: #fafafa; display: flex; flex-direction: column; gap: 15px; }
+        
+        table { 
+            width: 100%; 
+            border-collapse: separate; 
+            border-spacing: 0 6px; 
+            table-layout: fixed; 
+            margin-bottom: 15px; 
+        }
+        
+        th, td { 
+            border: 1px solid #ccc; 
+            padding: 8px; 
+            text-align: center; 
+            word-wrap: break-word; 
+            text-transform: uppercase; 
+        }
+        
+        th { 
+            background: #007bff; 
+            color: #fff; 
+            border-radius: 8px; 
+        }
+
+        tr:not(:first-child) td:first-child {
+            border-left: 1px solid #ccc;
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+        }
+
+        tr:not(:first-child) {
+            background-color: #ffffff;
         }
     </style>
 </head>
-
 <body>
 
-    <div class="layout-container">
-        <div class="part-1">
-            <div class="logo left-logo"><img src="indian logo.jpeg" alt="Indian Logo"></div>
-            <div class="center-text-container">
-                <div class="hindi-text">संयुक्त रनिंग रूम, दक्षिण पूर्व मध्य रेलवे, शहडोल</div>
-                <div class="english-text">COMBIND RUNNING ROOM, SOUTH EAST CENTRAL RAILWAY, SHAHDOL</div>
-                <div class="sub-header-text">OCCUPANCY PANEL</div>
-            </div>
-            <div class="logo right-logo"><img src="Vande_Bharat.jpeg" alt="Vande Bharat Logo"></div>
-        </div>
+    <!-- ऊपर का 20% भाग -->
+    <div class="top">
+        <span>ऊपर का 20% भाग (Header Section)</span>
+        
+        <!-- दाईं ओर PDF और BACK बटन का ग्रुप -->
+        <div class="header-buttons">
+            <!-- PDF Download Button -->
+            <a href="https://docs.google.com/spreadsheets/d/1GhaamtMtiFguLwsDbttYZHe5tLNV9RNwqmsX_vkQSoc/export?format=pdf&gid=1973573815&range=A1:D64" 
+               class="action-btn pdf-btn" 
+               target="_blank" 
+               title="Download Range A1:D64 as PDF">
+                📄 DOWNLOAD PDF
+            </a>
 
-        <div class="part-2"><div class="boxes-grid"></div></div>
-
-        <div class="part-3">
-            <table class="custom-table" id="staff-table">
-                <thead>
-                    <tr><th colspan="4">AVAILABLE STAFF</th><th rowspan="2">LR / HD</th><th rowspan="2">TOTAL STAFF</th><th rowspan="2">VACANT BED</th></tr>
-                    <tr><th>LPP/M</th><th>LPG</th><th>ALP</th><th>TM</th></tr>
-                </thead>
-                <tbody id="staff-tbody">
-                    <tr class="staff-data-row">
-                        <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <table class="custom-table table-second" id="q2u10-table">
-                <thead>
-                    <tr><th>USL</th><th>PND</th><th>BJRI</th><th>SGO</th><th>SJQ</th><th>BSP - C</th><th>LR</th></tr>
-                </thead>
-                <tbody id="q2u10-tbody">
-                    <tr><td colspan="7">-</td></tr>
-                </tbody>
-            </table>
-
-            <div class="switch-container">
-                <a href="form.html" class="switch-btn active" id="1">BOOKING STATUS</a>
-                <a href="overview.html" class="switch-btn">AT A GLANCE</a>
-            </div>
+            <!-- Back Button to Index / Form Page -->
+            <a href="index.html" 
+               class="action-btn back-btn" 
+               title="Go back to Index / Booking Status">
+                ⬅️ BACK
+            </a>
         </div>
     </div>
 
-    <!-- POPUP MODAL HTML -->
-    <div class="modal-overlay" id="roomModal">
-        <div class="modal-content">
-            <h3 id="modalRoomTitle">ROOM DETAILS</h3>
+    <!-- नीचे का 80% भाग -->
+    <div class="bottom">
+        
+        <!-- पहला बॉक्स जिसमें बाईं ओर की चारों टेबल होंगी -->
+        <div class="box">
+            <!-- पहली टेबल (Overview - A2:D9) -->
+            <table id="sheetTable">
+                <colgroup>
+                    <col style="width: 10%;">
+                    <col style="width: 40%;">
+                    <col style="width: 50%;">
+                </colgroup>
+                <tr>
+                    <th colspan="3">OVERVIEW</th>
+                </tr>
+            </table>
 
-            <!-- Sector 1-16 (Old Single Room Popup Layout) -->
-            <div id="singleRoomDetails">
-                <div class="modal-info-item">Date: <span id="modalDate">-</span></div>
-                <div class="modal-info-item">Train No.: <span id="modalTrainNo">-</span></div>
-                <div class="modal-info-item">LP Name / HQ: <span id="modalLp">-</span></div>
-                <div class="modal-info-item">ALP Name / HQ: <span id="modalAlp">-</span></div>
-                <div class="modal-info-item">Sign Off Time: <span id="modalSignOff">-</span></div>
-            </div>
+            <!-- दूसरी टेबल (OCCUPENCY DETAILS - A12:D15) -->
+            <table id="occupancyTable">
+                <colgroup>
+                    <col style="width: 10%;">
+                    <col style="width: 40%;">
+                    <col style="width: 50%;">
+                </colgroup>
+                <tr>
+                    <th colspan="3">OCCUPENCY DETAILS</th>
+                </tr>
+            </table>
 
-            <!-- Sector 17-22 & Sector 20 (Multi-Bed Card Layout) -->
-            <div id="occupiedRoomsContainer" class="occupied-rooms-container" style="display:none;"></div>
+            <!-- तीसरी टेबल (MONTHLY AVRAGE MEALS - A18:D20) -->
+            <table id="monthlyAvrageMealsTable">
+                <colgroup>
+                    <col style="width: 10%;">
+                    <col style="width: 40%;">
+                    <col style="width: 50%;">
+                </colgroup>
+                <tr>
+                    <th colspan="3">MONTHLY AVRAGE MEALS</th>
+                </tr>
+            </table>
 
-            <button class="close-btn" onclick="closeModal()">Close</button>
+            <!-- चौथी टेबल (INSPECTION & DUES DATE) -->
+            <table id="inspectionDuesDate">
+                <colgroup>
+                    <col style="width: 10%;">
+                    <col style="width: 40%;">
+                    <col style="width: 25%;">
+                    <col style="width: 25%;">
+                </colgroup>
+                <tr>
+                    <th colspan="4">INSPECTION & DUES DATE</th>
+                </tr>
+            </table>
+        </div>
+
+        <!-- दाईं ओर का बॉक्स जिसमें दोनों टेबल्स होंगी -->
+        <div class="box">
+            <table id="rightTable">
+                <colgroup>
+                    <col style="width: 10%;">
+                    <col style="width: 40%;">
+                    <col style="width: 25%;">
+                    <col style="width: 25%;">
+                </colgroup>
+                <tr>
+                    <th colspan="4">AMENITIES & FACILITIES</th>
+                </tr>
+            </table>
+
+            <table id="rightTable2">
+                <colgroup>
+                    <col style="width: 10%;">
+                    <col style="width: 40%;">
+                    <col style="width: 25%;">
+                    <col style="width: 25%;">
+                </colgroup>
+                <tr>
+                    <th colspan="4">CONTACT NO.</th>
+                </tr>
+            </table>
         </div>
     </div>
 
     <script>
-        const roomNames = {
-            1: "ROOM NO. - 1", 2: "ROOM NO. - 2", 3: "ROOM NO. - 3", 4: "ROOM NO. - 4",
-            5: "ROOM NO. - 5", 6: "ROOM NO. - 6", 7: "ROOM NO. - 7", 8: "ROOM NO. - 8",
-            9: "ROOM NO. - 13", 10: "ROOM NO. - 14", 11: "ROOM NO. - 15", 12: "ROOM NO. - 16",
-            13: "ROOM NO. - 17", 14: "ROOM NO. - 18", 15: "ROOM NO. - M.2", 16: "ROOM NO. - M.3",
-            17: "ROOM NO. - 09", 18: "ROOM NO. - 10", 19: "ROOM NO. - 11", 20: "ROOM NO. - 19",
-            21: "ROOM NO. - 12", 22: "ROOM NO. - M.1"
-        };
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyRJ4mnFgtEiW4ukVYUfxrGYpfmAmVm0ZDOjMMykWwDBcuXpPdiu2T9IjTMLfVjply7_A/exec';
 
-        let globalSheetData = null;
-
-        const mapping = {
-            1: { rowIndex: 1, fCol: 5, hCol: 7 }, 
-            2: { rowIndex: 2, fCol: 5, hCol: 7 }, 
-            3: { rowIndex: 3, fCol: 5, hCol: 7 }, 
-            4: { rowIndex: 4, fCol: 5, hCol: 7 }, 
-            5: { rowIndex: 5, fCol: 5, hCol: 7 }, 
-            6: { rowIndex: 6, fCol: 5, hCol: 7 }, 
-            7: { rowIndex: 7, fCol: 5, hCol: 7 }, 
-            8: { rowIndex: 8, fCol: 5, hCol: 7 },
-            9: { rowIndex: 22, fCol: 5, hCol: 7 },  
-            10: { rowIndex: 23, fCol: 5, hCol: 7 }, 
-            11: { rowIndex: 24, fCol: 5, hCol: 7 }, 
-            12: { rowIndex: 25, fCol: 5, hCol: 7 }, 
-            13: { rowIndex: 26, fCol: 5, hCol: 7 }, 
-            14: { rowIndex: 27, fCol: 5, hCol: 7 }, 
-            15: { rowIndex: 31, fCol: 5, hCol: 7 },
-            16: { rowIndex: 32, fCol: 5, hCol: 7 },
-            17: { rows: [9, 10, 11, 12], col: 9 },
-            18: { rows: [13, 14, 15, 16], col: 9 },
-            19: { rows: [17, 18, 19, 20], col: 9 },
-            20: {
-                pairs: [
-                    { r1: 28, c1: 5, r2: 28, c2: 7 }, 
-                    { r1: 29, c1: 5, r2: 29, c2: 7 }  
-                ],
-                cells: [
-                    { r: 28, c: 5 }, { r: 28, c: 7 }, 
-                    { r: 29, c: 5 }, { r: 29, c: 7 }
-                ]
-            },
-            21: {
-                rowIndex: 21,
-                cells: [
-                    { r: 21, c: 5 }, { r: 21, c: 7 }, { r: 21, c: 9 }
-                ]
-            },
-            22: {
-                rowIndex: 30,
-                cells: [
-                    { r: 30, c: 5 }, { r: 30, c: 7 }, { r: 30, c: 9 }
-                ]
-            }
-        };
-
-        function generate22Sets() {
-            const gridContainer = document.querySelector('.boxes-grid');
-            gridContainer.innerHTML = '';
-            for (let i = 1; i <= 22; i++) {
-                let cardHTML = '';
-                const roomTitle = roomNames[i] || '';
-
-                let clickAttr = (i <= 22) ? `onclick="openRoomDetails(${i})"` : `style="cursor: default;"`;
-
-                if (i >= 17 && i <= 20) {
-                    cardHTML = `<div class="box-card" id="set-${i}" ${clickAttr}><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes-4"><div class="mini-box box-1">-</div><div class="mini-box box-2">-</div><div class="mini-box box-3">-</div><div class="mini-box box-4">-</div></div></div>`;
-                } else if (i === 21 || i === 22) {
-                    cardHTML = `<div class="box-card" id="set-${i}" ${clickAttr}><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes-3"><div class="mini-box box-1">-</div><div class="mini-box box-2">-</div><div class="mini-box box-3">-</div></div></div>`;
-                } else if (i >= 9 && i <= 16) {
-                    cardHTML = `<div class="box-card" id="set-${i}" ${clickAttr}><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes-4" style="grid-template-columns: 1fr 1fr;"><div class="mini-box box-1">-</div><div class="mini-box box-2">-</div></div></div>`;
-                } else {
-                    cardHTML = `<div class="box-card" id="set-${i}" ${clickAttr}><div class="sky-blue-box">${roomTitle}</div><div class="sub-boxes"><div class="sky-blue-box-21 box-1">-</div><div class="sky-blue-box-3 box-2">-</div></div></div>`;
-                }
-                gridContainer.insertAdjacentHTML('beforeend', cardHTML);
-            }
-        }
-
-        function openRoomDetails(secId) {
-            if (!globalSheetData) {
-                alert('Google Sheet का data अभी load नहीं हुआ है। कृपया कुछ सेकंड बाद फिर क्लिक करें।');
-                return;
-            }
-
-            const singleDetails = document.getElementById('singleRoomDetails');
-            const occupiedContainer = document.getElementById('occupiedRoomsContainer');
-            const modalTitle = document.getElementById('modalRoomTitle');
-
-            if (secId === 21 || secId === 22) {
-                modalTitle.innerText = `SECTOR ${secId} - ROOMS DETAILS`;
-                singleDetails.style.display = 'none';
-                occupiedContainer.style.display = 'grid';
-                occupiedContainer.innerHTML = '';
-
-                let rowIndex = mapping[secId].rowIndex;
-                let rowData = globalSheetData[rowIndex] || [];
-
-                let dateVal = rowData[2];
-                let trainNoVal = rowData[3];
-                let lpName = rowData[4];
-                let lpHq = rowData[5];
-                let alpName = rowData[6];
-                let alpHq = rowData[7];
-                let tmName = rowData[8];
-                let tmHq = rowData[9];
-                let signOff = rowData[31];
-
-                let formattedDate = (dateVal !== undefined && dateVal !== '') ? formatDate(dateVal) : '-';
-                let trainVal = (trainNoVal !== undefined && trainNoVal !== '') ? trainNoVal : '-';
-                let lpVal = ((lpName !== undefined && lpName !== '') ? lpName : '-') + ' / ' + ((lpHq !== undefined && lpHq !== '') ? lpHq : '-');
-                let alpVal = ((alpName !== undefined && alpName !== '') ? alpName : '-') + ' / ' + ((alpHq !== undefined && alpHq !== '') ? alpHq : '-');
-                let tmVal = ((tmName !== undefined && tmName !== '') ? tmName : '-') + ' / ' + ((tmHq !== undefined && tmHq !== '') ? tmHq : '-');
-                let formattedSignOff = (signOff !== undefined && signOff !== '') ? formatTimeToHHMM(signOff) : '-';
-
-                const card = document.createElement('div');
-                card.className = 'occupied-room-card';
-                card.innerHTML = `
-                    <div class="bed-title">SECTOR ${secId} COMBINED DETAILS</div>
-                    <div class="room-detail-row">
-                        <div class="room-detail-label">1. DATE</div>
-                        <div class="room-detail-value">${escapeHtml(formattedDate)}</div>
-                    </div>
-                    <div class="room-detail-row">
-                        <div class="room-detail-label">2. TRAIN NO.</div>
-                        <div class="room-detail-value">${escapeHtml(trainVal)}</div>
-                    </div>
-                    <div class="room-detail-row">
-                        <div class="room-detail-label">3. LP NAME / HQ</div>
-                        <div class="room-detail-value">${escapeHtml(lpVal)}</div>
-                    </div>
-                    <div class="room-detail-row">
-                        <div class="room-detail-label">4. ALP NAME / HQ</div>
-                        <div class="room-detail-value">${escapeHtml(alpVal)}</div>
-                    </div>
-                    <div class="room-detail-row">
-                        <div class="room-detail-label">5. TM NAME / HQ</div>
-                        <div class="room-detail-value">${escapeHtml(tmVal)}</div>
-                    </div>
-                    <div class="room-detail-row">
-                        <div class="room-detail-label">6. SIGN OFF TIME</div>
-                        <div class="room-detail-value">${escapeHtml(formattedSignOff)}</div>
-                    </div>
-                `;
-                occupiedContainer.appendChild(card);
-
-                document.getElementById('roomModal').style.display = 'flex';
-                return;
-            }
-
-            if (secId === 20) {
-                modalTitle.innerText = `SECTOR 20 - ROOMS OCCUPANCY`;
-                singleDetails.style.display = 'none';
-                occupiedContainer.style.display = 'grid';
-                occupiedContainer.innerHTML = '';
-
-                let cardNames = ["19 A", "19 B"];
-                let pairs = mapping[20].pairs;
-
-                pairs.forEach((pair, index) => {
-                    let rowData = globalSheetData[pair.r1] || [];
-
-                    let dateVal = rowData[2];
-                    let trainNoVal = rowData[3];
-                    let lpName = rowData[4];
-                    let lpHq = rowData[5];
-                    let alpName = rowData[6];
-                    let alpHq = rowData[7];
-                    let signOff = rowData[31];
-
-                    let lpVal = ((lpName !== undefined && lpName !== '') ? lpName : '-') + ' / ' + ((lpHq !== undefined && lpHq !== '') ? lpHq : '-');
-                    let alpVal = ((alpName !== undefined && alpName !== '') ? alpName : '-') + ' / ' + ((alpHq !== undefined && alpHq !== '') ? alpHq : '-');
-                    let trainVal = (trainNoVal !== undefined && trainNoVal !== '') ? trainNoVal : '-';
-                    let formattedDate = (dateVal !== undefined && dateVal !== '') ? formatDate(dateVal) : '-';
-                    let formattedSignOff = (signOff !== undefined && signOff !== '') ? formatTimeToHHMM(signOff) : '-';
-
-                    const card = document.createElement('div');
-                    card.className = 'occupied-room-card';
-                    card.innerHTML = `
-                        <div class="bed-title">${cardNames[index]}</div>
-                        <div class="room-detail-row">
-                            <div class="room-detail-label">1. DATE</div>
-                            <div class="room-detail-value">${escapeHtml(formattedDate)}</div>
-                        </div>
-                        <div class="room-detail-row">
-                            <div class="room-detail-label">2. TRAIN NO.</div>
-                            <div class="room-detail-value">${escapeHtml(trainVal)}</div>
-                        </div>
-                        <div class="room-detail-row">
-                            <div class="room-detail-label">3. LP NAME / HQ</div>
-                            <div class="room-detail-value">${escapeHtml(lpVal)}</div>
-                        </div>
-                        <div class="room-detail-row">
-                            <div class="room-detail-label">4. ALP NAME / HQ</div>
-                            <div class="room-detail-value">${escapeHtml(alpVal)}</div>
-                        </div>
-                        <div class="room-detail-row">
-                            <div class="room-detail-label">5. SIGN OFF TIME</div>
-                            <div class="room-detail-value">${escapeHtml(formattedSignOff)}</div>
-                        </div>
-                    `;
-                    occupiedContainer.appendChild(card);
-                });
-
-                document.getElementById('roomModal').style.display = 'flex';
-                return;
-            }
-
-            if (secId >= 17 && secId <= 19) {
-                const sectorRows = mapping[secId] && mapping[secId].rows ? mapping[secId].rows : [];
-                const baseRoomNo = secId === 17 ? 9 : (secId === 18 ? 10 : 11);
-
-                modalTitle.innerText = `SECTOR ${secId} - ROOMS OCCUPANCY`;
-                singleDetails.style.display = 'none';
-                occupiedContainer.style.display = 'grid';
-                occupiedContainer.innerHTML = '';
-
-                sectorRows.forEach((rowIndex, index) => {
-                    const rowData = globalSheetData[rowIndex] || [];
-                    const dateVal = rowData[2];
-                    const trainNoVal = rowData[3];
-                    const tmName = rowData[8];
-                    const tmHq = rowData[9];
-                    const signOff = rowData[31];
-
-                    const roomName = `ROOM ${baseRoomNo}${String.fromCharCode(65 + index)}`;
-                    const tmNameVal = (tmName !== undefined && tmName !== null && String(tmName).trim() !== '') ? tmName : '-';
-                    const tmHqVal = (tmHq !== undefined && tmHq !== null && String(tmHq).trim() !== '') ? tmHq : '-';
-                    const trainVal = (trainNoVal !== undefined && trainNoVal !== null && String(trainNoVal).trim() !== '') ? trainNoVal : '-';
-                    const formattedDate = (dateVal !== undefined && dateVal !== '') ? formatDate(dateVal) : '-';
-                    const formattedSignOff = (signOff !== undefined && signOff !== '') ? formatTimeToHHMM(signOff) : '-';
-
-                    const card = document.createElement('div');
-                    card.className = 'occupied-room-card';
-                    card.innerHTML = `
-                        <div class="bed-title">${roomName}</div>
-                        <div class="room-detail-row">
-                            <div class="room-detail-label">1. DATE</div>
-                            <div class="room-detail-value">${escapeHtml(formattedDate)}</div>
-                        </div>
-                        <div class="room-detail-row">
-                            <div class="room-detail-label">2. TRAIN NO.</div>
-                            <div class="room-detail-value">${escapeHtml(trainVal)}</div>
-                        </div>
-                        <div class="room-detail-row">
-                            <div class="room-detail-label">3. TM NAME / HQ</div>
-                            <div class="room-detail-value">${escapeHtml(tmNameVal)} / ${escapeHtml(tmHqVal)}</div>
-                        </div>
-                        <div class="room-detail-row">
-                            <div class="room-detail-label">4. SIGN OFF TIME</div>
-                            <div class="room-detail-value">${escapeHtml(formattedSignOff)}</div>
-                        </div>
-                    `;
-                    occupiedContainer.appendChild(card);
-                });
-
-                document.getElementById('roomModal').style.display = 'flex';
-                return;
-            }
-
-            modalTitle.innerText = roomNames[secId] || `ROOM - ${secId}`;
-            singleDetails.style.display = 'block';
-            occupiedContainer.style.display = 'none';
-            occupiedContainer.innerHTML = '';
-
-            let dateVal = '-';
-            let trainNoVal = '-';
-            let lpVal = '-';
-            let alpVal = '-';
-            let signOffVal = '-';
-
-            let map = mapping[secId];
-            if (map && globalSheetData && globalSheetData[map.rowIndex]) {
-                let rowData = globalSheetData[map.rowIndex];
-                
-                let rawDate     = rowData[2]; 
-                let rawTrainNo  = rowData[3];
-                let rawLpName   = rowData[4];  
-                let rawLpHq     = rowData[5];     
-                let rawAlpName  = rowData[6];  
-                let rawAlpHq    = rowData[7];    
-                let rawSignOff  = rowData[31]; 
-
-                dateVal = (rawDate !== undefined && rawDate !== "") ? rawDate : '-';
-                trainNoVal = (rawTrainNo !== undefined && rawTrainNo !== "") ? rawTrainNo : '-';
-                
-                let lpPart = (rawLpName !== undefined && rawLpName !== "") ? rawLpName : '-';
-                let lpHqPart = (rawLpHq !== undefined && rawLpHq !== "") ? rawLpHq : '';
-                lpVal = lpHqPart ? `${lpPart} / ${lpHqPart}` : lpPart;
-
-                let alpPart = (rawAlpName !== undefined && rawAlpName !== "") ? rawAlpName : '-';
-                let alpHqPart = (rawAlpHq !== undefined && rawAlpHq !== "") ? rawAlpHq : '';
-                alpVal = alpHqPart ? `${alpPart} / ${alpHqPart}` : alpPart;
-
-                signOffVal = (rawSignOff !== undefined && rawSignOff !== "") ? rawSignOff : '-';
-            }
-
-            document.getElementById('modalDate').innerText = formatDate(dateVal);
-            document.getElementById('modalTrainNo').innerText = trainNoVal;
-            document.getElementById('modalLp').innerText = lpVal;
-            document.getElementById('modalAlp').innerText = alpVal;
-            document.getElementById('modalSignOff').innerText = formatTimeToHHMM(signOffVal);
-
-            document.getElementById('roomModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('roomModal').style.display = 'none';
-        }
-
-        function escapeHtml(value) {
-            if (value === undefined || value === null) return '-';
-            return String(value)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
-        }
-
-        // Updated formatDate function with +1 day (24 hours) correction for UTC offset
-        function formatDate(val) {
-            if (!val || val === '-') return '-';
-            
-            let d = new Date(val);
-            if (!isNaN(d.getTime())) {
-                d.setUTCDate(d.getUTCDate() + 1);
-                let day = String(d.getUTCDate()).padStart(2, '0');
-                let month = String(d.getUTCMonth() + 1).padStart(2, '0');
-                let year = d.getUTCFullYear();
-                return `${day}-${month}-${year}`;
-            }
-            
-            if (typeof val === 'string' && val.includes('T')) {
-                let datePart = val.split('T')[0];
-                let parts = datePart.split('-');
-                if (parts.length === 3) {
-                    let dObj = new Date(datePart);
-                    if (!isNaN(dObj.getTime())) {
-                        dObj.setUTCDate(dObj.getUTCDate() + 1);
-                        let day = String(dObj.getUTCDate()).padStart(2, '0');
-                        let month = String(dObj.getUTCMonth() + 1).padStart(2, '0');
-                        let year = dObj.getUTCFullYear();
-                        return `${day}-${month}-${year}`;
+        // तारीख को सही फॉर्मेट में बदलने का फंक्शन
+        function formatDate(value, formatType = 'mmm-yyyy') {
+            if (typeof value === 'string' && value.match(/^\d{4}-\d{2}-\d{2}T/)) {
+                let date = new Date(value);
+                if (!isNaN(date.getTime())) {
+                    if (formatType === 'mmm-yyyy') {
+                        let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                        let mmm = months[date.getMonth()];
+                        let yyyy = date.getFullYear();
+                        return mmm + "-" + yyyy; 
+                    } else if (formatType === 'dd-mm-yyyy') {
+                        let dd = String(date.getDate()).padStart(2, '0');
+                        let mm = String(date.getMonth() + 1).padStart(2, '0');
+                        let yyyy = date.getFullYear();
+                        return `${dd}-${mm}-${yyyy}`;
                     }
                 }
             }
-            return val;
+            return value;
         }
 
-        function formatTimeToHHMM(val) {
-            if (!val || val === '-') return '-';
-            if (typeof val === 'string' && val.includes('T')) {
-                let timePart = val.split('T')[1];
-                if (timePart) {
-                    let parts = timePart.split(':');
-                    if (parts.length >= 2) {
-                        return parts[0] + ':' + parts[1];
-                    }
-                }
-            }
-            return val;
-        }
-
-        function setBoxValueAndColor(boxEl, val) {
-            if (!boxEl) return;
-            let hasVal = (val !== undefined && val !== null && val !== "" && val !== "-");
-            boxEl.innerText = hasVal ? val : '-';
+        // रो जोड़ने और राउंडेड कॉर्नर देने वाला जनरल फंक्शन
+        function appendRowWithRoundedCorners(tableElement, rowData, isMerge3and4 = false, isOccupancyMonth = false, isInspectionTable = false) {
+            let tr = document.createElement('tr');
+            let validCells = rowData.filter(cell => cell !== "");
             
-            if (hasVal) {
-                boxEl.classList.add('has-value');
-                boxEl.classList.remove('is-empty');
+            if (isMerge3and4 && validCells.length === 3) {
+                rowData.forEach((cellData, cellIndex) => {
+                    if (cellData !== "") {
+                        let td = document.createElement('td');
+                        if (isInspectionTable && (cellIndex === 2 || cellIndex === 3)) {
+                            td.textContent = formatDate(cellData, 'dd-mm-yyyy');
+                        } else {
+                            td.textContent = cellData;
+                        }
+                        if (cellIndex === 2) {
+                            td.setAttribute('colspan', '2'); 
+                        }
+                        tr.appendChild(td);
+                    }
+                });
             } else {
-                boxEl.classList.add('is-empty');
-                boxEl.classList.remove('has-value');
+                rowData.forEach((cellData, cellIndex) => {
+                    let td = document.createElement('td');
+                    if (isOccupancyMonth && cellIndex === 2) {
+                        td.textContent = formatDate(cellData, 'mmm-yyyy');
+                    } else if (isInspectionTable && (cellIndex === 2 || cellIndex === 3)) {
+                        td.textContent = formatDate(cellData, 'dd-mm-yyyy');
+                    } else {
+                        td.textContent = cellData;
+                    }
+                    tr.appendChild(td);
+                });
             }
+
+            let tds = tr.querySelectorAll('td');
+            if (tds.length > 0) {
+                let lastTd = tds[tds.length - 1];
+                lastTd.style.borderTopRightRadius = '6px';
+                lastTd.style.borderBottomRightRadius = '6px';
+            }
+
+            tableElement.appendChild(tr);
         }
 
-        window.handleSheetData = function(data) {
-            if (!data || !Array.isArray(data)) return;
-            globalSheetData = data;
-
-            for (let secId in mapping) {
-                let map = mapping[secId];
-                let card = document.getElementById(`set-${secId}`);
-                if (!card) continue;
-
-                if (map.cells) {
-                    for (let idx = 0; idx < map.cells.length; idx++) {
-                        let cellInfo = map.cells[idx];
-                        let boxNum = idx + 1;
-                        let boxEl = card.querySelector(`.box-${boxNum}`);
-                        if (boxEl && data[cellInfo.r]) {
-                            let val = data[cellInfo.r][cellInfo.c];
-                            setBoxValueAndColor(boxEl, val);
+        fetch(scriptURL)
+            .then(response => response.json())
+            .then(data => {
+                let sheetTable = document.getElementById('sheetTable');
+                if (data.overview) {
+                    data.overview.forEach(row => {
+                        if (row.some(cell => cell !== "")) {
+                            appendRowWithRoundedCorners(sheetTable, row);
                         }
-                    }
-                } 
-                else if (map.rows) {
-                    for (let idx = 0; idx < map.rows.length; idx++) {
-                        let rIdx = map.rows[idx];
-                        let boxNum = idx + 1;
-                        let boxEl = card.querySelector(`.box-${boxNum}`);
-                        if (boxEl && data[rIdx]) {
-                            let val = data[rIdx][map.col];
-                            setBoxValueAndColor(boxEl, val);
+                    });
+                }
+
+                let occupancyTable = document.getElementById('occupancyTable');
+                if (data.occupancy) {
+                    data.occupancy.forEach((row, index) => {
+                        if (row.some(cell => cell !== "")) {
+                            let isMonthRow = (index === 0);
+                            appendRowWithRoundedCorners(occupancyTable, row, false, isMonthRow);
                         }
-                    }
-                } else {
-                    if (data[map.rowIndex]) {
-                        let box1 = card.querySelector('.box-1');
-                        let box2 = card.querySelector('.box-2');
-
-                        let val1 = data[map.rowIndex][map.fCol];
-                        let val2 = data[map.rowIndex][map.hCol];
-
-                        setBoxValueAndColor(box1, val1);
-                        setBoxValueAndColor(box2, val2);
-                    }
+                    });
                 }
-            }
 
-            const staffTbody = document.getElementById('staff-tbody');
-            if (staffTbody) {
-                staffTbody.innerHTML = '';
-                let r = 17;
-                let rowHtml = '<tr class="staff-data-row">';
-                for (let c = 16; c <= 22; c++) {
-                    let cellVal = '-';
-                    if (data[r] && data[r][c] !== undefined && data[r][c] !== null && data[r][c] !== "") {
-                        cellVal = data[r][c];
-                    }
-                    rowHtml += `<td>${cellVal}</td>`;
-                }
-                rowHtml += '</tr>';
-                staffTbody.insertAdjacentHTML('beforeend', rowHtml);
-            }
-
-            const tbody = document.getElementById('q2u10-tbody');
-            if (tbody) {
-                tbody.innerHTML = '';
-                for (let r = 1; r <= 10; r++) {
-                    let rowHtml = '<tr>';
-                    for (let c = 16; c <= 22; c++) {
-                        let cellVal = '-';
-                        if (data[r] && data[r][c] !== undefined && data[r][c] !== null && data[r][c] !== "") {
-                            cellVal = formatTimeToHHMM(data[r][c]);
+                let monthlyTable = document.getElementById('monthlyAvrageMealsTable');
+                if (data.monthly) {
+                    data.monthly.forEach(row => {
+                        if (row.some(cell => cell !== "")) {
+                            appendRowWithRoundedCorners(monthlyTable, row);
                         }
-                        rowHtml += `<td>${cellVal}</td>`;
-                    }
-                    rowHtml += '</tr>';
-                    tbody.insertAdjacentHTML('beforeend', rowHtml);
+                    });
                 }
-            }
-        };
+               
+                let inspectionDuesDate = document.getElementById('inspectionDuesDate');
+                if (data.inspection) {
+                    data.inspection.forEach(rows => {
+                        if (rows.some(cell => cell !== "")) {
+                            appendRowWithRoundedCorners(inspectionDuesDate, rows, true, false, true);
+                        }
+                    });
+                }
 
-        window.onload = function () {
-            generate22Sets();
+                let rightTable = document.getElementById('rightTable');
+                if (data.rightTable) {
+                    data.rightTable.forEach(row => {
+                        if (row.some(cell => cell !== "")) {
+                            appendRowWithRoundedCorners(rightTable, row, true);
+                        }
+                    });
+                }
 
-            const scriptUrl = "https://script.google.com/macros/s/AKfycbxpBqQu6xrd0QoL6pj54OSgkkv0pncLV-8kh5q16K4hnmu-pPSgvNKGUoBP9C_62Kn7Dg/exec?callback=handleSheetData";
-
-            let script = document.createElement('script');
-            script.src = scriptUrl;
-            document.body.appendChild(script);
-
-            setInterval(() => {
-                let oldScript = document.getElementById('dynamic-data-script');
-                if (oldScript) oldScript.remove();
-
-                let newScript = document.createElement('script');
-                newScript.id = 'dynamic-data-script';
-                newScript.src = scriptUrl + "&t=" + new Date().getTime();
-                document.body.appendChild(newScript);
-            }, 10000);
-        };
+                let rightTable2 = document.getElementById('rightTable2');
+                if (data.rightTable2) {
+                    data.rightTable2.forEach(row => {
+                        if (row.some(cell => cell !== "")) {
+                            appendRowWithRoundedCorners(rightTable2, row, true);
+                        }
+                    });
+                }
+            })
+            .catch(error => console.error('Error fetching sheet data:', error));
     </script>
-</body>
 
+</body>
 </html>
